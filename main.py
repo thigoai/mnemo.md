@@ -12,6 +12,40 @@ class Api:
     def __init__(self):
         self.window = None
 
+    def open_file(self):
+        home_dir = os.path.expanduser("~")
+
+        result = self.window.create_file_dialog(
+            webview.FileDialog.OPEN,
+            directory=home_dir
+        )
+        
+        if result:
+            file_path = result[0] if isinstance(result, (tuple, list)) else result
+            
+            with open(file_path, 'r', encoding='utf-8') as f:
+                return f.read()
+        return None
+
+    def save_file(self, content):
+        home_dir = os.path.expanduser("~")
+
+        result = self.window.create_file_dialog(
+            webview.FileDialog.SAVE,
+            directory=home_dir,
+            save_filename='doc.md'
+        )
+
+        if result: 
+            file_path = result[0] if isinstance(result, tuple) else result
+
+            with open(file_path, 'w', encoding='utf-8') as f:
+                f.write(content)
+            
+            return "File saved successfully!"
+        
+        return None
+
 if __name__ == '__main__':
     api = Api()
     html_path = get_resource_path('index.html')
