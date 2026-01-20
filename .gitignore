@@ -8,6 +8,10 @@ __pycache__/
 venv/
 .env/
 
+# ===== FrontLibs ===== 
+libs/
+.libs
+
 # ===== OS / Editor =====
 .DS_Store
 Thumbs.db
