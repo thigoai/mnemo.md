@@ -1,0 +1,30 @@
+# ===== Python =====
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+
+# ===== Virtual environment =====
+venv/
+.env/
+
+# ===== OS / Editor =====
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# ===== pywebview / build =====
+build/
+dist/
+*.spec
+
+# ===== Logs =====
+*.log
+
+# ===== User files =====
+*.md
+*.pdf
+
+# ===== Node / Frontend (se usar futuramente) =====
+node_modules/
