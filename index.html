@@ -79,10 +79,10 @@
 
             <div class="h-6 w-[1px] bg-slate-800 mx-1"></div>
 
-            <button onclick="open()" class="text-slate-400 hover:text-white text-xs font-medium">Open File</button>
+            <button onclick="open_file()" class="text-slate-400 hover:text-white text-xs font-medium">Open File</button>
             <button onclick="print_pdf()" class="text-slate-400 hover:text-white text-xs font-medium">Print PDF</button>
             
-            <button onclick="save()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded-md text-xs font-bold shadow-lg transition-transform active:scale-95">
+            <button onclick="save_file()" class="bg-blue-600 hover:bg-blue-500 text-white px-4 py-1.5 rounded-md text-xs font-bold shadow-lg transition-transform active:scale-95">
                 Save
             </button>
         </div>
@@ -92,6 +92,13 @@
         <div id="editor-container"></div>
         <div id="preview" class="markdown-body"></div>
     </main>
+
+    <script src="libs/marked.min.js"></script>
+    <script src="libs/codemirror.min.js"></script>
+    <script src="libs/markdown.min.js"></script>
+    <script src="libs/prism.min.js"></script>
+
+    <script src="script.js"></script>
     
 </body>
 </html>
