@@ -57,5 +57,13 @@ function open_file() {
 }
 
 function print_pdf() {
-    console.log("df printed");
+    const html = document.getElementById('preview').innerHTML;
+        const fullHtml = `<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8">
+        <style>
+            body{padding:40px; font-family:sans-serif; line-height:1.6;}
+            table{border-collapse:collapse; width:100%; border:1px solid #ddd;}
+            th, td{border:1px solid #ddd; padding:8px;}
+            pre{background:#f4f4f4; padding:10px; border-radius:5px;}
+        </style></head><body>${html}</body></html>`;
+        pywebview.api.export_pdf(fullHtml);
 }
