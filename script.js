@@ -41,3 +41,21 @@ function togglePreview() {
     previewVisivel = !previewVisivel;
     setTimeout(() => editor.refresh(), 10);
 }
+
+
+function save_file() { 
+    pywebview.api.save_file(editor.getValue()); 
+}
+
+function open_file() { 
+    pywebview.api.open_file().then(content => {
+        if (content !== undefined && content !== null) {
+            editor.setValue(content);
+            editor.refresh();
+        }
+    });
+}
+
+function print_pdf() {
+    console.log("df printed");
+}
