@@ -47,10 +47,18 @@ class Api:
         return None
     
     def export_pdf(self, html_content):
-        file_path = window.create_file_dialog(webview.FileDialog.SAVE, save_filename='documento.pdf')
-        if file_path:
-            path = file_path[0] if isinstance(file_path, tuple) else file_path
-    
+
+        home_dir = os.path.expanduser("~")
+
+        result = self.window.create_file_dialog(
+            webview.FileDialog.SAVE,
+            directory=home_dir,
+            save_filename='doc.pdf'
+        )
+
+        if result: 
+            file_path = result[0] if isinstance(result, tuple) else result
+
             options = {
                 'encoding': "UTF-8",
                 'custom-header': [
@@ -61,11 +69,13 @@ class Api:
             }
             
             try:
-                pdfkit.from_string(html_content, path, options=options)
+                pdfkit.from_string(html_content, file_path, options=options)
                 return "PDF saved successfully!"
             except Exception as e:
                 print(f"Error description: {e}")
                 return f"Error to export: {str(e)}"
+        
+        return None
 
 if __name__ == '__main__':
     api = Api()
