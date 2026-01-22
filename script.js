@@ -32,11 +32,11 @@ function togglePreview() {
     if (previewVisivel) {
         previewDiv.classList.add('hidden');
         editorDiv.style.width = "100%";
-        btnText.innerText = "Mostrar Preview";
+        btnText.innerText = "Show Preview";
     } else {
         previewDiv.classList.remove('hidden');
         editorDiv.style.width = "50%";
-        btnText.innerText = "Esconder Preview";
+        btnText.innerText = "Hidden Preview";
     }
     previewVisivel = !previewVisivel;
     setTimeout(() => editor.refresh(), 10);
