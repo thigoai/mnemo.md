@@ -25,21 +25,28 @@ editor.on("change", () => {
 
 
 function togglePreview() {
-    const editorDiv = document.getElementById('editor-container');
-    const previewDiv = document.getElementById('preview');
+    const preview = document.getElementById('preview');
+    const editor = document.getElementById('editor-container');
+    const iconHidden = document.getElementById('icon-hidden');
+    const iconShow = document.getElementById('icon-show');
     const btnText = document.getElementById('btnText');
 
-    if (previewVisivel) {
-        previewDiv.classList.add('hidden');
-        editorDiv.style.width = "100%";
-        btnText.innerText = "Show Preview";
+    if (preview.classList.contains('hidden')) {
+        preview.classList.remove('hidden');
+        editor.style.width = "50%";
+        preview.style.width = "50%";
+        
+        iconHidden.classList.add('hidden');
+        iconShow.classList.remove('hidden');
+        btnText.innerText = "Hide Preview";
     } else {
-        previewDiv.classList.remove('hidden');
-        editorDiv.style.width = "50%";
-        btnText.innerText = "Hidden Preview";
+        preview.classList.add('hidden');
+        editor.style.width = "100%";
+        
+        iconHidden.classList.remove('hidden');
+        iconShow.classList.add('hidden');
+        btnText.innerText = "Show Preview";
     }
-    previewVisivel = !previewVisivel;
-    setTimeout(() => editor.refresh(), 10);
 }
 
 
@@ -69,7 +76,7 @@ function print_pdf() {
 }
 
 window.addEventListener('keydown', e => {
-        if (e.ctrlKey && e.key === 's') { e.preventDefault(); save_file(); }
-        if (e.ctrlKey && e.key === 'o') { e.preventDefault(); open_file(); }
-        if (e.ctrlKey && e.key === 'p') { e.preventDefault(); togglePreview(); }
-    });
+    if (e.ctrlKey && e.key === 's') { e.preventDefault(); save_file(); }
+    if (e.ctrlKey && e.key === 'o') { e.preventDefault(); open_file(); }
+    if (e.ctrlKey && e.key === 'p') { e.preventDefault(); togglePreview(); }
+});
