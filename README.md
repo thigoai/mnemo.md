@@ -37,7 +37,6 @@ To use the PDF export feature, ensure `wkhtmltopdf` is installed on your system:
 
 ```
 	sudo apt install wkhtmltopdf
-
 ```
 ### Installation
 
@@ -46,26 +45,22 @@ To use the PDF export feature, ensure `wkhtmltopdf` is installed on your system:
 ```
 	git clone https://github.com/your-username/mnemo.git
 	cd mnemo
-
 ```
 2. Install Python dependencies:
 
 ```
 	pip install -r requirements.txt
-
 ```
 3. Download frontend assets:
 
 ```
 	chmod +x download_front_libs.sh
     ./download_front_libs.sh
-
 ```
 4. Launch the application:
 
 ```
 	python main.py
-
 ```
 
 
