@@ -76,7 +76,8 @@ function print_pdf() {
 }
 
 window.addEventListener('keydown', e => {
-    if (e.ctrlKey && e.key === 's') { e.preventDefault(); save_file(); }
-    if (e.ctrlKey && e.key === 'o') { e.preventDefault(); open_file(); }
-    if (e.ctrlKey && e.key === 'p') { e.preventDefault(); togglePreview(); }
+    if (e.ctrlKey && e.key === 's' || e.key === 'S') { e.preventDefault(); save_file(); }
+    if (e.ctrlKey && e.key === 'o' || e.key === 'O') { e.preventDefault(); open_file(); }
+    if (e.ctrlKey && e.key === 'p' || e.key === 'P') { e.preventDefault(); open_file(); }
+    if (e.ctrlKey && e.key === 'h' || e.key === 'H') { e.preventDefault(); togglePreview(); }
 });
