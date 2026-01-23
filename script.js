@@ -67,3 +67,9 @@ function print_pdf() {
         </style></head><body>${html}</body></html>`;
         pywebview.api.export_pdf(fullHtml);
 }
+
+window.addEventListener('keydown', e => {
+        if (e.ctrlKey && e.key === 's') { e.preventDefault(); save_file(); }
+        if (e.ctrlKey && e.key === 'o') { e.preventDefault(); open_file(); }
+        if (e.ctrlKey && e.key === 'p') { e.preventDefault(); togglePreview(); }
+    });
