@@ -32,7 +32,7 @@ Mnemo is a desktop application that uses Python with a modern frontend, using Py
 
 - **Print PDF**: `Ctrl+P`.
 
-- **Show/hidden Preview**: `Ctrl+o`.
+- **Show/hidden Preview**: `Ctrl+H`.
 
 # ⚙ Setup
 
