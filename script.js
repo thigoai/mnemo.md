@@ -49,18 +49,33 @@ function togglePreview() {
     }
 }
 
+async function callApi(funcName, ...args) {
+    if (!window.pywebview || !window.pywebview.api) {
+        await new Promise(resolve => setTimeout(resolve, 100));
+    }
+
+    try {
+        if (window.pywebview && window.pywebview.api && window.pywebview.api[funcName]) {
+            return await window.pywebview.api[funcName](...args);
+        } else {
+            throw new Error(`Funcion ${funcName} dont find in API.`);
+        }
+    } catch (err) {
+        console.error("API call fail:", err);
+    }
+}
 
 function save_file() { 
-    pywebview.api.save_file(editor.getValue()); 
+    callApi('save_file', editor.getValue()); 
 }
 
 function open_file() { 
-    pywebview.api.open_file().then(content => {
+    callApi('open_file').then(content => {
         if (content !== undefined && content !== null) {
             editor.setValue(content);
             editor.refresh();
         }
-    });
+    }).catch(err => console.log(err));
 }
 
 function print_pdf() {
