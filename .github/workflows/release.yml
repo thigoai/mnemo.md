@@ -13,35 +13,31 @@ jobs:
 
     steps:
       - name: 📥 Checkout do código
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: 🐍 Configurar Python
-        uses: actions/setup-python@v4
+      - name: 🐍 Configurar Python 3.10
+        uses: actions/setup-python@v5
         with:
-          python-version: '3.10' 
+          python-version: '3.10'
+          cache: 'pip'
 
-      - name: 📦 Instalar Dependências do Sistema (Linux/GTK)
-        # AQUI ESTÁ A CORREÇÃO CRUCIAL:
-        # 1. libglib2.0-dev: Contém os arquivos 'girepository-2.0' que o PyGObject precisa.
-        # 2. libwebkit2gtk-4.1-dev: Versão correta para o Ubuntu 24.04.
+      - name: 📦 Instalar dependências do sistema (GTK / WebKit / PDF)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y \
-            libglib2.0-dev \
+          sudo apt update
+          sudo apt install -y \
             libgirepository1.0-dev \
-            gcc \
+            gir1.2-gtk-3.0 \
             libcairo2-dev \
             pkg-config \
             python3-dev \
-            gir1.2-gtk-3.0 \
             libwebkit2gtk-4.1-dev \
             wkhtmltopdf
 
-      - name: 📦 Instalar Dependências Python
+      - name: 📦 Instalar dependências Python
         run: |
-          pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install pyinstaller
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pyinstaller
 
       - name: ⬇️ Baixar Frontend Libs
         run: |
@@ -53,7 +49,7 @@ jobs:
           chmod +x build.sh
           ./build.sh
 
-      - name: 📦 Criar Pacote .deb
+      - name: 📦 Criar pacote .deb
         run: |
           chmod +x make_deb.sh
           ./make_deb.sh
