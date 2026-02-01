@@ -21,11 +21,18 @@ jobs:
           python-version: '3.10' 
 
       - name: 📦 Install System Dependencies (Linux/GTK)
-        # FIX: Updated to libwebkit2gtk-4.1-dev for Ubuntu 24.04
-        # FIX: Combined into a single line to prevent whitespace syntax errors
         run: |
           sudo apt-get update
-          sudo apt-get install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0 libwebkit2gtk-4.1-dev wkhtmltopdf
+          sudo apt-get install -y \
+            libglib2.0-dev \
+            libgirepository1.0-dev \
+            gcc \
+            libcairo2-dev \
+            pkg-config \
+            python3-dev \
+            gir1.2-gtk-3.0 \
+            libwebkit2gtk-4.1-dev \
+            wkhtmltopdf
 
       - name: 📦 Install Python Dependencies
         run: |
