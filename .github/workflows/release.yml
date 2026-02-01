@@ -21,8 +21,9 @@ jobs:
           python-version: '3.10' 
 
       - name: 📦 Instalar Dependências do Sistema (Linux/GTK)
-        # CORREÇÃO: Adicionado libglib2.0-dev para corrigir o erro 'girepository-2.0 not found'
-        # CORREÇÃO: Mantido libwebkit2gtk-4.1-dev para compatibilidade com Ubuntu 24.04
+        # AQUI ESTÁ A CORREÇÃO CRUCIAL:
+        # 1. libglib2.0-dev: Contém os arquivos 'girepository-2.0' que o PyGObject precisa.
+        # 2. libwebkit2gtk-4.1-dev: Versão correta para o Ubuntu 24.04.
         run: |
           sudo apt-get update
           sudo apt-get install -y \
@@ -43,19 +44,16 @@ jobs:
           pip install pyinstaller
 
       - name: ⬇️ Baixar Frontend Libs
-        # Executa o script que você enviou para baixar assets
         run: |
           chmod +x download_front_libs.sh
           ./download_front_libs.sh
 
       - name: 🔨 Build do Executável
-        # Executa o build do PyInstaller
         run: |
           chmod +x build.sh
           ./build.sh
 
       - name: 📦 Criar Pacote .deb
-        # Cria o instalador Debian
         run: |
           chmod +x make_deb.sh
           ./make_deb.sh
