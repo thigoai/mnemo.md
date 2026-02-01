@@ -9,31 +9,25 @@ jobs:
   build-linux:
     runs-on: ubuntu-latest
     permissions:
-      contents: write 
+      contents: write
 
     steps:
-      - name: 📥 Code Checkout
+      - name: 📥 Checkout Code
         uses: actions/checkout@v3
 
-      - name: 🐍 Python COnfig.
+      - name: 🐍 Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10' 
 
-      - name: 📦 Install System Dependency (Linux/GTK)
+      - name: 📦 Install System Dependencies (Linux/GTK)
+        # FIX: Updated to libwebkit2gtk-4.1-dev for Ubuntu 24.04
+        # FIX: Combined into a single line to prevent whitespace syntax errors
         run: |
           sudo apt-get update
-          sudo apt-get install -y \
-            libgirepository1.0-dev \
-            gcc \
-            libcairo2-dev \
-            pkg-config \
-            python3-dev \
-            gir1.2-gtk-3.0 \
-            libwebkit2gtk-4.1-dev \  
-            wkhtmltopdf
+          sudo apt-get install -y libgirepository1.0-dev gcc libcairo2-dev pkg-config python3-dev gir1.2-gtk-3.0 libwebkit2gtk-4.1-dev wkhtmltopdf
 
-      - name: 📦 Install Python Dependency
+      - name: 📦 Install Python Dependencies
         run: |
           pip install --upgrade pip
           pip install -r requirements.txt
@@ -49,12 +43,12 @@ jobs:
           chmod +x build.sh
           ./build.sh
 
-      - name: 📦 Make Package .deb
+      - name: 📦 Create .deb Package
         run: |
           chmod +x make_deb.sh
           ./make_deb.sh
 
-      - name: 🚀  GitHub Release
+      - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
