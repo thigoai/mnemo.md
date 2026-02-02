@@ -1,3 +1,4 @@
 pywebview>=5.0
 pdfkit>=1.0.0
+markdown>=3.5
 PyGObject>=3.42.0 ; sys_platform == "linux"
