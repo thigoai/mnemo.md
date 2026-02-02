@@ -31,13 +31,10 @@ function updatePreviewButton() {
     const iconContainer = document.getElementById('layout-icon');
     const textContainer = document.getElementById('layout-text');
     
-    // Configuração base do SVG
     const svgBase = '<svg xmlns="http://www.w3.org/2000/svg" class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">';
     const svgEnd = '</svg>';
 
     if (previewState === 0) {
-        // Estado Atual: Editor Cheio -> Botão mostra que o próximo é Split? 
-        // Ou mostra o estado atual? Geralmente mostra o estado ATUAL.
         iconContainer.innerHTML = svgBase + icons.editor + svgEnd;
         textContainer.innerText = "Editor";
     } 
