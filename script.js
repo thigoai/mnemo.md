@@ -20,13 +20,15 @@ editor.on("scroll", (instance) => {
     preview.scrollTop = ratio * (preview.scrollHeight - preview.clientHeight);
 });
 
-editor.on("change", () => {
+editor.on("change", async () => {
     const preview = document.getElementById('preview');
     const content = editor.getValue();
-    preview.innerHTML = marked.parse(content);
+
+    const html = await pywebview.api.render_markdown(content);
+    preview.innerHTML = html;
+    
     if (window.Prism) Prism.highlightAllUnder(preview);
 });
-
 function updatePreviewButton() {
     const iconContainer = document.getElementById('layout-icon');
     const textContainer = document.getElementById('layout-text');
@@ -133,15 +135,7 @@ function open_file() {
 }
 
 function print_pdf() {
-    const html = document.getElementById('preview').innerHTML;
-        const fullHtml = `<!DOCTYPE html><html lang="pt-br"><head><meta charset="UTF-8">
-        <style>
-            body{padding:40px; font-family:sans-serif; line-height:1.6;}
-            table{border-collapse:collapse; width:100%; border:1px solid #ddd;}
-            th, td{border:1px solid #ddd; padding:8px;}
-            pre{background:#f4f4f4; padding:10px; border-radius:5px;}
-        </style></head><body>${html}</body></html>`;
-        pywebview.api.export_pdf(fullHtml);
+    pywebview.api.export_pdf(editor.getValue());
 }
 
 window.addEventListener('keydown', e => {
