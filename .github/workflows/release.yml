@@ -21,17 +21,21 @@ jobs:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: 📦 Instalar dependências do sistema (GTK / WebKit / PDF)
+      - name: 📦 Instalar dependências do sistema (GTK / GI)
         run: |
           sudo apt update
           sudo apt install -y \
-            libgirepository1.0-dev \
+            gobject-introspection \
+            libgirepository-2.0-dev \
+            libglib2.0-dev \
+            libffi-dev \
             gir1.2-gtk-3.0 \
             libcairo2-dev \
             pkg-config \
             python3-dev \
             libwebkit2gtk-4.1-dev \
             wkhtmltopdf
+
 
       - name: 📦 Instalar dependências Python
         run: |
