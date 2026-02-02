@@ -11,7 +11,6 @@ urls=(
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css"
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/mode/markdown/markdown.min.js"
     "https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/dracula.min.css"
-    "https://cdn.jsdelivr.net/npm/marked/marked.min.js"
     "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/prism.min.js"
     "https://cdnjs.cloudflare.com/ajax/libs/prism/1.29.0/themes/prism-tomorrow.min.css"
     "https://cdnjs.cloudflare.com/ajax/libs/github-markdown-css/5.2.0/github-markdown.min.css"
