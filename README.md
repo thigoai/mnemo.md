@@ -3,7 +3,7 @@
 An elegant and functional **Markdown editor** built with **Python** and **Web Technologies**.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/a9111846-0c05-4a29-8252-06ef4d68cfbb" width="500">
+  <img src="https://github.com/user-attachments/assets/af166793-78f5-47b5-85ee-04f4d65135ce" width="500">
 </p>
 
 Mnemo is a desktop application that uses Python with a modern frontend, using PyWebView. It offers a fluid writing experience with real-time preview and direct export to PDF.
