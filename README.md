@@ -18,8 +18,6 @@ Mnemo is a desktop application that uses Python with a modern frontend, using Py
 
   * `CodeMirror` (Text editor).
 
-  * `marked.js` (Markdown rendering).
-
   * `Prism.js` (Code highlighting in preview).
 
 - **Utilities**: `pdfkit` (wkhtmltopdf) for generating PDF files.
