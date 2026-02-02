@@ -32,7 +32,10 @@ Mnemo is a desktop application that uses Python with a modern frontend, using Py
 
 - **Print PDF**: `Ctrl+P`.
 
-- **Show/hidden Preview**: `Ctrl+H`.
+- **Split Screen**:
+	- `Ctrl + ←` — Enable/disable split view or move focus to the preview panel.
+  	- `Ctrl + →` — Enable/disable split view or move focus to the editor panel.
+
 
 # ⚙ Setup
 
