@@ -12,16 +12,16 @@ jobs:
       contents: write
 
     steps:
-      - name: 📥 Checkout do código
+      - name: 📥 Checkout repository
         uses: actions/checkout@v4
 
-      - name: 🐍 Configurar Python 3.10
+      - name: 🐍 Set up Python 3.10
         uses: actions/setup-python@v5
         with:
           python-version: '3.10'
           cache: 'pip'
 
-      - name: 📦 Instalar dependências do sistema (GTK / GI)
+      - name: 📦 Install system dependencies (GTK / GI)
         run: |
           sudo apt update
           sudo apt install -y \
@@ -36,24 +36,23 @@ jobs:
             libwebkit2gtk-4.1-dev \
             wkhtmltopdf
 
-
-      - name: 📦 Instalar dependências Python
+      - name: 📦 Install Python dependencies
         run: |
           python -m pip install --upgrade pip
           python -m pip install -r requirements.txt
           python -m pip install pyinstaller
 
-      - name: ⬇️ Baixar Frontend Libs
+      - name: ⬇️ Download frontend libraries
         run: |
           chmod +x download_front_libs.sh
           ./download_front_libs.sh
 
-      - name: 📦 Criar pacote .deb
+      - name: 📦 Build Debian package
         run: |
           chmod +x make_deb.sh
           ./make_deb.sh
 
-      - name: 🚀 Criar Release no GitHub
+      - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v1
         if: startsWith(github.ref, 'refs/tags/')
         with:
