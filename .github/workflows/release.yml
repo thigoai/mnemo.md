@@ -48,11 +48,6 @@ jobs:
           chmod +x download_front_libs.sh
           ./download_front_libs.sh
 
-      - name: 🔨 Build do Executável
-        run: |
-          chmod +x build.sh
-          ./build.sh
-
       - name: 📦 Criar pacote .deb
         run: |
           chmod +x make_deb.sh
