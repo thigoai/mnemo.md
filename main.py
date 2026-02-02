@@ -2,6 +2,7 @@ import webview
 import os
 import sys
 import pdfkit
+import markdown
 
 os.environ['PYWEBVIEW_GUI'] = 'gtk'
 
@@ -20,6 +21,9 @@ class Api:
 
     def set_window(self, window):
         self._window = window
+
+    def render_markdown(self, text):
+        return markdown.markdown(text, extensions=['extra', 'codehilite', 'fenced_code'])
 
     def open_file(self):
         home_dir = os.path.expanduser("~")
@@ -53,30 +57,21 @@ class Api:
 
         return None
 
-    def export_pdf(self, html_content):
+    def export_pdf(self, markdown_content):
+        html_body = self.render_markdown(markdown_content)
+        
         home_dir = os.path.expanduser("~")
-
-        result = self._window.create_file_dialog(
-            webview.SAVE_DIALOG,
-            directory=home_dir,
-            save_filename='doc.pdf'
-        )
+        result = self._window.create_file_dialog(webview.SAVE_DIALOG, directory=home_dir, save_filename='doc.pdf')
 
         if result:
             path = result[0] if isinstance(result, (list, tuple)) else result
-
-            options = {
-                'encoding': 'UTF-8',
-                'quiet': '',
-                'no-outline': None
-            }
-
+            full_html = f"<html><head><meta charset='UTF-8'></head><body>{html_body}</body></html>"
+            
             try:
-                pdfkit.from_string(html_content, path, options=options)
+                pdfkit.from_string(full_html, path)
                 return "PDF saved successfully!"
             except Exception as e:
-                return f"Error to export: {str(e)}"
-
+                return f"Error: {str(e)}"
         return None
 
 
