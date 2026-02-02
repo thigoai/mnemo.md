@@ -3,8 +3,6 @@
 // 2 = preview 100%
 let previewState = 0;
 
-marked.setOptions({ breaks: true, gfm: true });
-
 const editor = CodeMirror(document.getElementById("editor-container"), {
     mode: "markdown",
     theme: "dracula",
