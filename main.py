@@ -59,19 +59,34 @@ class Api:
 
     def export_pdf(self, markdown_content):
         html_body = self.render_markdown(markdown_content)
-        
         home_dir = os.path.expanduser("~")
         result = self._window.create_file_dialog(webview.SAVE_DIALOG, directory=home_dir, save_filename='doc.pdf')
 
         if result:
             path = result[0] if isinstance(result, (list, tuple)) else result
-            full_html = f"<html><head><meta charset='UTF-8'></head><body>{html_body}</body></html>"
             
+            full_html = f"""
+            <!DOCTYPE html>
+            <html>
+            <head>
+                <meta charset="UTF-8">
+                <style>
+                    body {{ padding: 40px; font-family: sans-serif; line-height: 1.6; color: #333; }}
+                    pre {{ background: #f4f4f4; padding: 15px; border-radius: 5px; overflow-x: auto; }}
+                    code {{ font-family: 'Fira Code', monospace; background: #f4f4f4; padding: 2px 4px; }}
+                    table {{ border-collapse: collapse; width: 100%; margin: 20px 0; }}
+                    th, td {{ border: 1px solid #ddd; padding: 12px; text-align: left; }}
+                    th {{ background-color: #f8f9fa; }}
+                </style>
+            </head>
+            <body>{html_body}</body>
+            </html>
+            """
             try:
                 pdfkit.from_string(full_html, path)
-                return "PDF saved successfully!"
+                return "PDF exportado!"
             except Exception as e:
-                return f"Error: {str(e)}"
+                return f"Erro: {str(e)}"
         return None
 
 
