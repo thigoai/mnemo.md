@@ -4,4 +4,9 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "markdown>=3.5",
+    "pdfkit>=1.0.0",
+    "pygobject>=3.42.0",
+    "pywebview>=5.0",
+]
