@@ -90,9 +90,8 @@ class Api:
         return None
 
 
-if __name__ == '__main__':
+def main():
     api = Api()
-
     html_path = get_resource_path('index.html')
 
     window = webview.create_window(
@@ -105,5 +104,7 @@ if __name__ == '__main__':
     )
 
     api.set_window(window)
-
     webview.start()
+
+if __name__ == '__main__':
+    main()
