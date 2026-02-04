@@ -50,7 +50,7 @@ jobs:
       - name: 📦 Build Debian package
         run: |
           chmod +x make_deb.sh
-          ./make_deb.sh
+          ./scripts/make_deb.sh
 
       - name: 🚀 Create GitHub Release
         uses: softprops/action-gh-release@v1
