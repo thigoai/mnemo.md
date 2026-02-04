@@ -10,6 +10,8 @@ Mnemo is a desktop application that uses Python with a modern frontend, using Py
 
 ## 🛠 Technologies Used
 
+- **Manager**: [uv](https://docs.astral.sh/uv/) (Fast Python package & project manager).
+
 - **Backend**: Python 3 with `pywebview` for the desktop interface.
 
 - **Frontend**: HTML, CSS (Tailwind), and JavaScript.
@@ -38,12 +40,16 @@ Mnemo is a desktop application that uses Python with a modern frontend, using Py
 # ⚙ Setup
 
 ### Prerequisites
-To use the PDF export feature, ensure `wkhtmltopdf` is installed on your system:
+1. Install the `uv` manager:
+```
+	curl -LsSf https://astral.sh/uv/install.sh | sh
+```
+2. To use the PDF export feature, ensure `wkhtmltopdf` is installed on your system:
 
 ```
 	sudo apt install wkhtmltopdf
 ```
-### Installation
+### Installation & Execution
 
 1. Clone the repository:
 
@@ -51,22 +57,19 @@ To use the PDF export feature, ensure `wkhtmltopdf` is installed on your system:
 	git clone https://github.com/your-username/mnemo.git
 	cd mnemo
 ```
-2. Install Python dependencies:
+2. **Sync the project**: This will create a virtual environment and install all dependencies automatically.
 
 ```
-	pip install -r requirements.txt
+	uv sync
 ```
 3. Download frontend assets:
 
 ```
-	chmod +x download_front_libs.sh
-    ./download_front_libs.sh
+	chmod +x scripts/download_front_libs.sh
+	./scripts/download_front_libs.sh
 ```
 4. Launch the application:
 
 ```
-	python main.py
+	uv run mnemo
 ```
-
-
-
