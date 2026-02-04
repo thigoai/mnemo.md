@@ -1,6 +1,6 @@
 #!/bin/bash
-mkdir -p libs
-cd libs
+mkdir -p frontend/libs
+cd frontend/libs
 
 echo "Downloading frontend libraries..."
 
