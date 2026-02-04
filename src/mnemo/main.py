@@ -8,13 +8,12 @@ os.environ['PYWEBVIEW_GUI'] = 'gtk'
 
 
 def get_resource_path(relative_path):
-    if hasattr(sys, '_MEIPASS'):
-        return os.path.join(sys._MEIPASS, relative_path)
-
     base_path = os.path.dirname(os.path.abspath(__file__))
-    return os.path.normpath(os.path.join(base_path, "..", "..", "frontend", relative_path))
-
-
+    
+    prod_path = os.path.join(base_path, "frontend", relative_path)
+    dev_path = os.path.normpath(os.path.join(base_path, "..", "..", "frontend", relative_path))
+    
+    return dev_path if os.path.exists(dev_path) else prod_path
 class Api:
     def __init__(self):
         self._window = None
