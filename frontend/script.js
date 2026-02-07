@@ -24,6 +24,18 @@ editor.on("change", async () => {
 
     const html = await pywebview.api.render_markdown(content);
     preview.innerHTML = html;
+
+    if (window.renderMathInElement) {
+        renderMathInElement(preview, {
+            delimiters: [
+                {left: "$$", right: "$$", display: true},
+                {left: "$", right: "$", display: false},
+                {left: "\\(", right: "\\)", display: false},
+                {left: "\\[", right: "\\]", display: true}
+            ],
+            throwOnError: false
+        });
+    }
     
     if (window.Prism) Prism.highlightAllUnder(preview);
 });
