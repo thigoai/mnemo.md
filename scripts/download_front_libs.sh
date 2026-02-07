@@ -53,4 +53,4 @@ else
     exit 1
 fi
 
-echo "✨ Done! All libraries are located in $LIBS_DIR"
+echo "✅ Done! All libraries are located in $LIBS_DIR"
