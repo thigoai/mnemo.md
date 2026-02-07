@@ -22,7 +22,16 @@ class Api:
         self._window = window
 
     def render_markdown(self, text):
-        return markdown.markdown(text, extensions=['extra', 'codehilite', 'fenced_code'])
+        return markdown.markdown(text, extensions=[
+            'extra', 
+            'codehilite', 
+            'fenced_code',
+            'pymdownx.arithmatex' 
+        ], extension_configs={
+            'pymdownx.arithmatex': {
+                'generic': True,   
+            }
+        })
 
     def open_file(self):
         home_dir = os.path.expanduser("~")
