@@ -1,0 +1,90 @@
+<!-- Chosen Palette: Mnemo Lite (Slate-50 background with Dracula-inspired accents: #282a36, #bd93f9, #ff79c6, #50fa7b) -->
+
+<!-- Application Structure Plan: A single-page application (technical dashboard) designed to explain the architecture and usage of 'mnemo'. 
+    1. **Hero Section**: Quick overview, value proposition, and metadata.
+    2. **Architecture Dashboard**: An interactive block diagram visualizing the Hybrid Python/Web architecture. Users can click blocks to see technical details.
+    3. **Tech Stack**: Interactive chart visualizing the stack composition.
+    4. **Feature Explorer**: A filterable interactive grid to learn keyboard shortcuts and features.
+    5. **Installation Guide**: A step-by-step interface guiding the user through the setup.
+    6. **File Navigator**: An interactive tree view of the project files. -->
+
+<!-- Visualization & Content Choices:
+    1. **Architecture Flow**: Flexbox Diagram with JS interaction. No SVG.
+    2. **Stack Composition**: Doughnut Chart (Chart.js/Canvas).
+    3. **Shortcut Master**: Interactive card grid with JS Filter.
+    4. **Installation Timeline**: Horizontal CSS Stepper. -->
+
+<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>mnemo | Interactive Technical Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
+        .font-mono { font-family: 'Fira Code', monospace; }
+        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #f1f5f9; }
+        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+
+        .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+        @media (min-width: 768px) {
+            .chart-container { height: 350px; }
+        }
+
+        /* Interactive Architecture Diagram Styles */
+        .arch-block {
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .arch-block:hover {
+            border-color: #bd93f9;
+            background-color: #f8fafc;
+        }
+        .arch-block.active {
+            border-color: #ff79c6;
+            background-color: #fff0f5;
+            box-shadow: 0 0 0 2px #ff79c6;
+        }
+        .connector-line {
+            height: 2px;
+            background-color: #cbd5e1;
+            flex-grow: 1;
+            position: relative;
+        }
+        .connector-arrow::after {
+            content: '►';
+            position: absolute;
+            right: -6px;
+            top: -8px;
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .step-active { border-color: #bd93f9; color: #282a36; font-weight: bold; }
+        .step-inactive { border-color: #e2e8f0; color: #94a3b8; }
+    </style>
+</head>
+<body class="text-slate-700">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
+        <div class
