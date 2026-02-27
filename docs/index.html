@@ -87,4 +87,581 @@
 
     <!-- Navbar -->
     <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-        <div class
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">mnemo</span>
+                    <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-full font-mono">v1.0.1</span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#overview" class="text-slate-600 hover:text-purple-600 transition-colors">Overview</a>
+                    <a href="#architecture" class="text-slate-600 hover:text-purple-600 transition-colors">Architecture</a>
+                    <a href="#features" class="text-slate-600 hover:text-purple-600 transition-colors">Features</a>
+                    <a href="#installation" class="text-slate-600 hover:text-purple-600 transition-colors">Installation</a>
+                    <a href="#files" class="text-slate-600 hover:text-purple-600 transition-colors">Files</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
+
+        <!-- 1. Hero / Overview -->
+        <section id="overview" class="grid md:grid-cols-2 gap-12 items-center">
+            <div class="space-y-6">
+                <div class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold mb-2">Technical Documentation</div>
+                <h1 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
+                    Elegant Markdown Editing <br>
+                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">Powered by Python & Web</span>
+                </h1>
+                <p class="text-lg text-slate-600 leading-relaxed">
+                    **mnemo** is a hybrid desktop application that bridges the gap between Python's robust backend capabilities and the modern web's rendering power. It features real-time preview, KaTeX math support, and direct PDF export.
+                </p>
+                <div class="flex flex-wrap gap-4 pt-4">
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
+                        <span class="text-2xl">🐍</span>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Backend</p>
+                            <p class="font-semibold text-slate-800">Python 3.10+</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
+                        <span class="text-2xl">🌐</span>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">Frontend</p>
+                            <p class="font-semibold text-slate-800">HTML5 / JS</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
+                        <span class="text-2xl">⚖️</span>
+                        <div>
+                            <p class="text-xs text-slate-500 uppercase font-bold">License</p>
+                            <p class="font-semibold text-slate-800">MIT</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Tech Composition Chart -->
+            <div class="card p-6 border border-slate-100">
+                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Technical Composition</h3>
+                <div class="chart-container">
+                    <canvas id="techChart"></canvas>
+                </div>
+                <p class="text-center text-sm text-slate-500 mt-4">Based on file analysis and library distribution</p>
+            </div>
+        </section>
+
+        <!-- 2. Interactive Architecture -->
+        <section id="architecture" class="space-y-6">
+            <div class="max-w-3xl">
+                <h2 class="text-3xl font-bold text-slate-900">System Architecture</h2>
+                <p class="text-slate-600 mt-2">Explore the hybrid architecture. Click on any block below to understand how data flows from the user's keyboard to the rendered preview and PDF output.</p>
+            </div>
+
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Diagram Area -->
+                <div class="lg:col-span-2 bg-white p-8 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
+                    <div class="absolute top-0 right-0 bg-slate-50 px-3 py-1 text-xs text-slate-400 font-mono rounded-bl-lg border-b border-l border-slate-200">Interactive Diagram</div>
+                    
+                    <!-- Frontend Layer -->
+                    <div class="mb-8 p-4 border-2 border-dashed border-blue-200 rounded-lg bg-blue-50/30">
+                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-4 text-center">Frontend (Webview / Browser)</h4>
+                        <div class="flex justify-between items-center gap-4">
+                            <!-- CodeMirror -->
+                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('codemirror')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⌨️</div>
+                                <h5 class="font-bold text-slate-700">CodeMirror</h5>
+                                <p class="text-xs text-slate-500 mt-1">User Input</p>
+                            </div>
+                            
+                            <div class="connector-line connector-arrow"></div>
+
+                            <!-- JS Bridge -->
+                            <div class="arch-block w-1/3 bg-purple-50 p-4 rounded-lg border border-purple-300 shadow-sm text-center group" onclick="showArchDetail('bridge')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🌉</div>
+                                <h5 class="font-bold text-purple-700">JS Bridge</h5>
+                                <p class="text-xs text-purple-500 mt-1">window.pywebview</p>
+                            </div>
+
+                            <div class="connector-line connector-arrow"></div>
+
+                            <!-- Preview DOM -->
+                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('preview')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">👁️</div>
+                                <h5 class="font-bold text-slate-700">Preview DOM</h5>
+                                <p class="text-xs text-slate-500 mt-1">KaTeX + Prism</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- IPC Gap -->
+                    <div class="flex justify-center mb-8">
+                        <div class="px-4 py-1 bg-slate-200 text-slate-600 text-xs rounded-full font-mono">IPC (Inter-Process Communication)</div>
+                    </div>
+
+                    <!-- Backend Layer -->
+                    <div class="p-4 border-2 border-dashed border-green-200 rounded-lg bg-green-50/30">
+                        <h4 class="text-xs font-bold text-green-600 uppercase mb-4 text-center">Backend (Python Process)</h4>
+                        <div class="flex justify-center gap-8">
+                            <!-- API Class -->
+                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('api')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⚙️</div>
+                                <h5 class="font-bold text-slate-700">Api Class</h5>
+                                <p class="text-xs text-slate-500 mt-1">Core Logic</p>
+                            </div>
+
+                             <!-- Markdown Engine -->
+                             <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('markdown')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📝</div>
+                                <h5 class="font-bold text-slate-700">MD Engine</h5>
+                                <p class="text-xs text-slate-500 mt-1">Python-Markdown</p>
+                            </div>
+
+                             <!-- OS Layer -->
+                             <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('os')">
+                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">💾</div>
+                                <h5 class="font-bold text-slate-700">OS / IO</h5>
+                                <p class="text-xs text-slate-500 mt-1">Files & PDFKit</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Detail Panel -->
+                <div class="lg:col-span-1 bg-slate-800 text-white p-6 rounded-xl shadow-lg flex flex-col justify-center">
+                    <div id="arch-detail-content" class="space-y-4">
+                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-2xl mb-4">ℹ️</div>
+                        <h3 class="text-xl font-bold text-purple-300">Architecture Explorer</h3>
+                        <p class="text-slate-300 text-sm leading-relaxed">
+                            Click on any component in the diagram to view its specific role, source file location, and technical implementation details.
+                        </p>
+                        <div class="mt-8 p-4 bg-slate-700/50 rounded border border-slate-600">
+                            <h4 class="font-bold text-xs text-slate-400 uppercase mb-2">Main Flow</h4>
+                            <ul class="text-sm space-y-2 font-mono text-green-300">
+                                <li>1. User types in CodeMirror</li>
+                                <li>2. JS calls pywebview.api</li>
+                                <li>3. Python processes Markdown</li>
+                                <li>4. HTML is returned to JS</li>
+                                <li>5. KaTeX processes Math</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. Features & Shortcuts -->
+        <section id="features" class="bg-slate-50 p-8 rounded-2xl border border-slate-200">
+            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
+                <div>
+                    <h2 class="text-3xl font-bold text-slate-900">Features and Shortcuts</h2>
+                    <p class="text-slate-600 mt-2">Master the editor with these shortcuts and capabilities.</p>
+                </div>
+                <div class="flex gap-2">
+                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500 active-filter" onclick="filterFeatures('all', this)">All</button>
+                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500" onclick="filterFeatures('shortcut', this)">Shortcuts</button>
+                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500" onclick="filterFeatures('core', this)">Core Features</button>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="feature-grid">
+                <!-- Features generated by JS -->
+            </div>
+        </section>
+
+        <!-- 4. Installation & Setup -->
+        <section id="installation">
+            <h2 class="text-3xl font-bold text-slate-900 mb-8">Installation Process</h2>
+            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+                <!-- Stepper Header -->
+                <div class="flex border-b border-slate-200 overflow-x-auto">
+                    <button onclick="setStep(0)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 transition-colors step-active" id="step-btn-0">1. Prerequisites</button>
+                    <button onclick="setStep(1)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-1">2. Clone & Sync</button>
+                    <button onclick="setStep(2)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-2">3. Static Assets</button>
+                    <button onclick="setStep(3)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-3">4. Run</button>
+                </div>
+
+                <!-- Step Content -->
+                <div class="p-8 min-h-[300px] flex items-center">
+                    <!-- Step 0 -->
+                    <div class="step-content w-full" id="step-0">
+                        <div class="flex gap-6 items-start">
+                            <div class="bg-purple-100 p-3 rounded-lg text-2xl">📦</div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">System Prerequisites</h3>
+                                <p class="text-slate-600 mb-4">Ensure your system is ready for Python 3.10+ development and PDF generation.</p>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
+                                        <h4 class="font-bold text-slate-700 text-sm mb-2">Install 'uv' Manager</h4>
+                                        <code class="block bg-slate-800 text-green-400 p-2 rounded text-xs font-mono">curl -LsSf https://astral.sh/uv/install.sh | sh</code>
+                                    </div>
+                                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
+                                        <h4 class="font-bold text-slate-700 text-sm mb-2">PDF Engine</h4>
+                                        <code class="block bg-slate-800 text-green-400 p-2 rounded text-xs font-mono">sudo apt install wkhtmltopdf</code>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 1 -->
+                    <div class="step-content w-full hidden" id="step-1">
+                        <div class="flex gap-6 items-start">
+                            <div class="bg-blue-100 p-3 rounded-lg text-2xl">⬇️</div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Clone & Sync</h3>
+                                <p class="text-slate-600 mb-4">Get the source code and let 'uv' manage the Python environment and dependencies (pdfkit, pywebview, etc).</p>
+                                <pre class="bg-slate-800 text-slate-200 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>git clone https://github.com/your-username/mnemo.git
+cd mnemo
+uv sync  <span class="text-slate-500"># Creates venv & installs deps from uv.lock</span></code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-content w-full hidden" id="step-2">
+                        <div class="flex gap-6 items-start">
+                            <div class="bg-yellow-100 p-3 rounded-lg text-2xl">⚡</div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Download Static Assets</h3>
+                                <p class="text-slate-600 mb-4">Mnemo is designed to run offline. The provided shell script fetches Tailwind, CodeMirror, and KaTeX from CDNs to the local folder.</p>
+                                <div class="bg-slate-50 p-4 rounded border border-slate-200 mb-4">
+                                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Script Action: download_front_libs.sh</p>
+                                    <ul class="text-sm space-y-1 list-disc pl-4 text-slate-700">
+                                        <li>Creates <code>frontend/libs</code> folder</li>
+                                        <li>Downloads <code>tailwind.min.js</code>, <code>prism.js</code>, etc.</li>
+                                        <li>Downloads & Unzips the <code>KaTeX</code> release</li>
+                                    </ul>
+                                </div>
+                                <code class="block bg-slate-800 text-green-400 p-3 rounded text-sm font-mono">
+                                    chmod +x scripts/download_front_libs.sh<br>
+                                    ./scripts/download_front_libs.sh
+                                </code>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-content w-full hidden" id="step-3">
+                        <div class="flex gap-6 items-start">
+                            <div class="bg-green-100 p-3 rounded-lg text-2xl">🚀</div>
+                            <div class="flex-1">
+                                <h3 class="text-xl font-bold text-slate-800 mb-2">Run the Application</h3>
+                                <p class="text-slate-600 mb-4">Launch the editor. Use 'uv run' to ensure the correct virtual environment context is used.</p>
+                                <code class="block bg-slate-800 text-green-400 p-4 rounded text-lg font-mono text-center">uv run mnemo</code>
+                                <div class="mt-6 p-4 bg-orange-50 border border-orange-200 rounded text-orange-800 text-sm">
+                                    <strong>Tip:</strong> If PDF export fails, verify that <code>wkhtmltopdf</code> is in your system PATH.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Stepper Footer -->
+                <div class="bg-slate-50 p-4 flex justify-between border-t border-slate-200">
+                    <button onclick="changeStep(-1)" class="px-4 py-2 rounded text-slate-600 hover:bg-slate-200 disabled:opacity-50" id="prev-btn" disabled>Previous</button>
+                    <button onclick="changeStep(1)" class="px-4 py-2 bg-slate-800 text-white rounded hover:bg-slate-700 disabled:opacity-50" id="next-btn">Next Step</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. File Structure Tree -->
+        <section id="files" class="grid lg:grid-cols-2 gap-8">
+            <div>
+                <h2 class="text-3xl font-bold text-slate-900 mb-4">Project Structure</h2>
+                <p class="text-slate-600 mb-6">Navigate the file tree to understand the purpose of each component in the repository.</p>
+                <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm overflow-x-auto">
+                    <ul class="space-y-2 font-mono text-sm" id="file-tree">
+                        <!-- Populated by JS -->
+                    </ul>
+                </div>
+            </div>
+            <div class="bg-slate-900 rounded-xl p-6 text-slate-300 shadow-lg flex flex-col justify-center min-h-[250px]">
+                <div id="file-detail-content">
+                    <h3 class="text-xl font-bold text-white mb-2">Select a file</h3>
+                    <p class="text-slate-400">Click on any file in the tree to view its role and main contents.</p>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500">Interactive Documentation Generated for <span class="font-bold text-slate-700">mnemo</span></p>
+            <p class="text-slate-400 text-sm mt-2">© 2026 Thiago F. | MIT License</p>
+        </div>
+    </footer>
+
+    <script>
+        // --- Data ---
+        const archDetails = {
+            'codemirror': {
+                title: 'CodeMirror Editor (Frontend)',
+                desc: 'The visual markdown editor. Configured in `script.js` with the Dracula theme.',
+                tech: ['JavaScript', 'CSS', 'DOM Event: change', 'DOM Event: scroll'],
+                file: 'frontend/script.js',
+                code: 'editor.on("change", async () => { ... })'
+            },
+            'bridge': {
+                title: 'JS Bridge (IPC)',
+                desc: 'The communication channel provided by PyWebView. Allows JS to call Python methods asynchronously.',
+                tech: ['window.pywebview.api', 'Promise/Async'],
+                file: 'frontend/script.js',
+                code: 'await pywebview.api.render_markdown(content)'
+            },
+            'preview': {
+                title: 'Preview Renderer',
+                desc: 'Receives HTML from Python. KaTeX processes math delimiters ($$) and Prism highlights code blocks.',
+                tech: ['KaTeX', 'Prism.js', 'HTML DOM'],
+                file: 'frontend/script.js',
+                code: 'renderMathInElement(preview, ...)'
+            },
+            'api': {
+                title: 'Api Class (Backend)',
+                desc: 'The Python class exposed to JS. Handles logic that requires system access or Python libraries.',
+                tech: ['Python Class', 'IPC Handler'],
+                file: 'main.py',
+                code: 'class Api:\n  def render_markdown(self, text)...'
+            },
+            'markdown': {
+                title: 'Markdown Engine',
+                desc: 'Converts Markdown text to HTML. Uses pymdown-extensions for advanced features like Arithmatex (Math).',
+                tech: ['Markdown Library', 'pymdown-extensions'],
+                file: 'main.py',
+                code: "extensions=['extra', 'pymdownx.arithmatex']"
+            },
+            'os': {
+                title: 'OS & IO Operations',
+                desc: 'Handles Open/Save File dialogs and PDF generation via system binaries (wkhtmltopdf).',
+                tech: ['os', 'pdfkit', 'webview.create_file_dialog'],
+                file: 'main.py',
+                code: "pdfkit.from_string(full_html, path)"
+            }
+        };
+
+        const features = [
+            { type: 'shortcut', icon: '📂', title: 'Open File', desc: 'Trigger the file system dialog to load .md files.', keys: ['Ctrl', 'O'] },
+            { type: 'shortcut', icon: '💾', title: 'Save File', desc: 'Write current editor content to disk.', keys: ['Ctrl', 'S'] },
+            { type: 'shortcut', icon: '🖨️', title: 'Export PDF', desc: 'Generate styled PDF via wkhtmltopdf.', keys: ['Ctrl', 'P'] },
+            { type: 'shortcut', icon: '⬅️', title: 'Focus Preview', desc: 'Shift navigation focus or view to the left.', keys: ['Ctrl', 'Left'] },
+            { type: 'shortcut', icon: '➡️', title: 'Focus Editor', desc: 'Shift navigation focus or view to the right.', keys: ['Ctrl', 'Right'] },
+            { type: 'core', icon: '🧮', title: 'Math Support', desc: 'Render LaTeX equations using KaTeX ($E=mc^2$).', keys: [] },
+            { type: 'core', icon: '💅', title: 'Syntax Highlight', desc: 'Prism.js support for code blocks in markdown.', keys: [] },
+            { type: 'core', icon: '🌗', title: 'Split View', desc: 'Real-time side-by-side editing and preview.', keys: [] }
+        ];
+
+        const fileStructure = [
+            { name: 'mnemo/', type: 'folder', children: [
+                { name: 'frontend/', type: 'folder', children: [
+                    { name: 'libs/', type: 'folder', desc: 'Downloaded static resources (Tailwind, KaTeX, Prism).' },
+                    { name: 'index.html', type: 'file', desc: 'Main UI structure. Links CSS/JS and defines the split-pane layout.' },
+                    { name: 'script.js', type: 'file', desc: 'Frontend Logic: CodeMirror Init, Scroll Sync, IPC Calls, KaTeX Rendering.' }
+                ]},
+                { name: 'src/mnemo/', type: 'folder', children: [
+                    { name: 'main.py', type: 'file', desc: 'Entry point. Configures the PyWebview window, API class, and PDF export logic.' }
+                ]},
+                { name: 'scripts/', type: 'folder', children: [
+                    { name: 'download_front_libs.sh', type: 'file', desc: 'Bash script to download necessary JS/CSS libraries for offline use.' },
+                    { name: 'make_deb.sh', type: 'file', desc: 'Build automation to package the app into a .deb installer.' }
+                ]},
+                { name: 'pyproject.toml', type: 'file', desc: 'Project configuration. Defines dependencies and build system (hatchling).' },
+                { name: 'uv.lock', type: 'file', desc: 'Exact dependency versions locked by uv.' }
+            ]}
+        ];
+
+        // --- Logic ---
+
+        // 1. Chart Initialization
+        document.addEventListener('DOMContentLoaded', () => {
+            const ctx = document.getElementById('techChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Backend (Python)', 'Frontend (JS/HTML/CSS)', 'Packaging (Shell)', 'Config (TOML)'],
+                    datasets: [{
+                        data: [35, 45, 15, 5],
+                        backgroundColor: ['#bd93f9', '#ff79c6', '#50fa7b', '#f1fa8c'],
+                        borderWidth: 0
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { usePointStyle: true } }
+                    },
+                    cutout: '70%'
+                }
+            });
+
+            // Initialize other components
+            renderFeatures('all');
+            renderFileTree(fileStructure, document.getElementById('file-tree'));
+        });
+
+        // 2. Architecture Interaction
+        function showArchDetail(key) {
+            const data = archDetails[key];
+            const container = document.getElementById('arch-detail-content');
+            
+            // Highlight block
+            document.querySelectorAll('.arch-block').forEach(el => el.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+
+            // Update Content
+            container.innerHTML = `
+                <div class="flex items-center gap-3 mb-4">
+                     <span class="text-3xl bg-slate-700 w-12 h-12 flex items-center justify-center rounded-lg shadow-inner">${getKeyIcon(key)}</span>
+                     <div>
+                        <h3 class="text-xl font-bold text-purple-300">${data.title}</h3>
+                        <span class="text-xs bg-slate-700 px-2 py-1 rounded text-slate-300 font-mono">${data.file}</span>
+                     </div>
+                </div>
+                <p class="text-slate-300 text-sm leading-relaxed border-b border-slate-700 pb-4">${data.desc}</p>
+                
+                <div class="space-y-3">
+                    <div>
+                        <h4 class="font-bold text-xs text-slate-500 uppercase mb-2">Technologies</h4>
+                        <div class="flex flex-wrap gap-2">
+                            ${data.tech.map(t => `<span class="text-xs bg-slate-700 text-slate-200 px-2 py-1 rounded border border-slate-600">${t}</span>`).join('')}
+                        </div>
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-xs text-slate-500 uppercase mb-2">Code Snippet</h4>
+                        <pre class="bg-slate-950 p-3 rounded border-l-2 border-green-400 text-xs font-mono text-green-300 overflow-x-auto"><code>${data.code}</code></pre>
+                    </div>
+                </div>
+            `;
+            container.classList.add('animate-fade-in');
+        }
+
+        function getKeyIcon(key) {
+            const icons = { 'codemirror': '⌨️', 'bridge': '🌉', 'preview': '👁️', 'api': '⚙️', 'markdown': '📝', 'os': '💾' };
+            return icons[key] || '📦';
+        }
+
+        // 3. Feature Filtering
+        function renderFeatures(filter) {
+            const grid = document.getElementById('feature-grid');
+            grid.innerHTML = '';
+            
+            const filtered = filter === 'all' ? features : features.filter(f => f.type === filter);
+            
+            filtered.forEach(f => {
+                const keysHtml = f.keys.length ? 
+                    `<div class="flex gap-1 mt-3">
+                        ${f.keys.map(k => `<kbd class="px-2 py-1 bg-slate-100 border-b-2 border-slate-300 rounded text-xs font-bold text-slate-600 font-mono">${k}</kbd>`).join('')}
+                    </div>` : '';
+
+                const card = document.createElement('div');
+                card.className = 'card p-5 border border-slate-100 flex flex-col h-full';
+                card.innerHTML = `
+                    <div class="flex items-start justify-between mb-2">
+                        <div class="p-2 bg-slate-50 rounded-lg text-2xl">${f.icon}</div>
+                        <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">${f.type === 'shortcut' ? 'Shortcut' : 'Core'}</span>
+                    </div>
+                    <h4 class="font-bold text-slate-800 text-lg">${f.title}</h4>
+                    <p class="text-sm text-slate-500 mt-1 flex-grow">${f.desc}</p>
+                    ${keysHtml}
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function filterFeatures(type, btn) {
+            renderFeatures(type);
+            document.querySelectorAll('#features button').forEach(b => b.classList.remove('active-filter', 'ring-2', 'ring-purple-500'));
+            btn.classList.add('active-filter', 'ring-2', 'ring-purple-500');
+        }
+
+        // 4. Stepper Logic
+        let currentStep = 0;
+        const totalSteps = 4;
+
+        function setStep(step) {
+            currentStep = step;
+            updateStepperUI();
+        }
+
+        function changeStep(dir) {
+            currentStep = Math.min(Math.max(currentStep + dir, 0), totalSteps - 1);
+            updateStepperUI();
+        }
+
+        function updateStepperUI() {
+            // Update Headers
+            for (let i = 0; i < totalSteps; i++) {
+                const btn = document.getElementById(`step-btn-${i}`);
+                if (i === currentStep) {
+                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-purple-500 text-purple-700 font-bold transition-colors';
+                } else if (i < currentStep) {
+                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-green-400 text-green-600 transition-colors';
+                } else {
+                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-transparent text-slate-400 hover:bg-slate-50 transition-colors';
+                }
+            }
+
+            // Show Content
+            document.querySelectorAll('.step-content').forEach((el, index) => {
+                if (index === currentStep) {
+                    el.classList.remove('hidden');
+                    el.classList.add('animate-fade-in');
+                } else {
+                    el.classList.add('hidden');
+                }
+            });
+
+            // Update Buttons
+            document.getElementById('prev-btn').disabled = currentStep === 0;
+            document.getElementById('next-btn').innerText = currentStep === totalSteps - 1 ? 'Finish' : 'Next Step';
+            document.getElementById('next-btn').disabled = currentStep === totalSteps - 1;
+        }
+
+        // 5. File Tree Logic
+        function renderFileTree(nodes, parentEl) {
+            nodes.forEach(node => {
+                const li = document.createElement('li');
+                const isFolder = node.type === 'folder';
+                
+                const icon = isFolder ? '📁' : '📄';
+                const colorClass = isFolder ? 'text-yellow-500' : 'text-slate-500';
+                
+                li.innerHTML = `
+                    <div class="flex items-center gap-2 py-1 px-2 hover:bg-slate-50 rounded cursor-pointer group" onclick="showFileDetail('${node.name}', '${node.desc || ''}', '${node.type === 'folder' ? 'Folder' : 'File'}')">
+                        <span class="${colorClass}">${icon}</span>
+                        <span class="group-hover:text-purple-600 transition-colors">${node.name}</span>
+                    </div>
+                `;
+
+                if (node.children) {
+                    const ul = document.createElement('ul');
+                    ul.className = "pl-6 border-l border-slate-200 ml-2 mt-1";
+                    renderFileTree(node.children, ul);
+                    li.appendChild(ul);
+                }
+                parentEl.appendChild(li);
+            });
+        }
+
+        function showFileDetail(name, desc, type) {
+            const container = document.getElementById('file-detail-content');
+            const icon = type === 'Folder' ? '📁' : '📄';
+            
+            container.innerHTML = `
+                <div class="mb-4">
+                    <span class="text-4xl block mb-2">${icon}</span>
+                    <h3 class="text-2xl font-bold text-white break-all">${name}</h3>
+                    <span class="inline-block px-2 py-1 mt-2 rounded bg-slate-700 text-xs text-slate-300 uppercase font-bold">${type}</span>
+                </div>
+                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
+                    <h4 class="text-slate-400 text-xs uppercase font-bold mb-2">Description / Purpose</h4>
+                    <p class="text-slate-200 leading-relaxed">${desc || 'No specific description available.'}</p>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>
