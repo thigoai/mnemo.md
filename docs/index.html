@@ -1,666 +1,598 @@
-<!-- Chosen Palette: Mnemo Lite (Slate-50 background with Dracula-inspired accents: #282a36, #bd93f9, #ff79c6, #50fa7b) -->
+<!-- Chosen Palette: Flowbite Dark Theme (bg-gray-900, text-gray-400, accent blue-500, borders gray-800) -->
 
-<!-- Application Structure Plan: A single-page application (technical dashboard) designed to explain the architecture and usage of 'mnemo'. 
-    1. **Hero Section**: Quick overview, value proposition, and metadata.
-    2. **Architecture Dashboard**: An interactive block diagram visualizing the Hybrid Python/Web architecture. Users can click blocks to see technical details.
-    3. **Tech Stack**: Interactive chart visualizing the stack composition.
-    4. **Feature Explorer**: A filterable interactive grid to learn keyboard shortcuts and features.
-    5. **Installation Guide**: A step-by-step interface guiding the user through the setup.
-    6. **File Navigator**: An interactive tree view of the project files. -->
+<!-- Application Structure Plan: A classic 3-column technical documentation layout (SPA) inspired by Flowbite.
+    1. **Top Navbar**: Fixed header with Logo, Search input mockup (Ctrl+K), quick links, and a primary CTA.
+    2. **Left Sidebar**: Main navigation, fixed on desktop, scrollable, grouping sections (Getting Started, Integration, etc.).
+    3. **Right Sidebar**: "ON THIS PAGE" table of contents, tracking scroll position with a blue left-border highlight.
+    4. **Main Content Area**: Central column with a max-width, containing the prose, charts, and interactive components styled in dark mode. -->
 
 <!-- Visualization & Content Choices:
-    1. **Architecture Flow**: Flexbox Diagram with JS interaction. No SVG.
-    2. **Stack Composition**: Doughnut Chart (Chart.js/Canvas).
-    3. **Shortcut Master**: Interactive card grid with JS Filter.
-    4. **Installation Timeline**: Horizontal CSS Stepper. -->
+    1. **Architecture Flow**: Restyled for dark mode. Gray-800 blocks, blue-500 active states.
+    2. **Stack Composition**: Doughnut Chart updated with dark mode legend text.
+    3. **Feature List**: Table matching Flowbite's dark table styles (gray-800 header, gray-700 borders).
+    4. **Installation**: Stepper restyled to match dark mode UI with blue active steps. -->
 
-<!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+<!-- CONFIRMATION: NO SVG graphics used for complex diagrams. NO Mermaid JS used. -->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>mnemo | Interactive Technical Documentation</title>
+    <title>mnemo - Documentation</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['Fira Code', 'monospace'],
+                    },
+                    colors: {
+                        gray: {
+                            50: '#f9fafb', 100: '#f3f4f6', 200: '#e5e7eb', 300: '#d1d5db', 400: '#9ca3af',
+                            500: '#6b7280', 600: '#4b5563', 700: '#374151', 800: '#1f2937', 900: '#111827',
+                        },
+                        blue: {
+                            500: '#3b82f6', 600: '#2563eb', 700: '#1d4ed8',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
     <style>
-        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; color: #334155; }
-        .font-mono { font-family: 'Fira Code', monospace; }
-        .card { background: white; border-radius: 12px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); transition: transform 0.2s, box-shadow 0.2s; }
-        .card:hover { transform: translateY(-2px); box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1); }
+        body { background-color: #111827; color: #9ca3af; }
         
         /* Custom Scrollbar */
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #f1f5f9; }
-        ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-        ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-track { background: #111827; }
+        ::-webkit-scrollbar-thumb { background: #374151; border-radius: 4px; border: 2px solid #111827; }
+        ::-webkit-scrollbar-thumb:hover { background: #4b5563; }
 
-        .chart-container {
-            position: relative;
-            width: 100%;
-            max-width: 600px;
-            margin-left: auto;
-            margin-right: auto;
-            height: 300px;
-            max-height: 400px;
-        }
-        @media (min-width: 768px) {
-            .chart-container { height: 350px; }
-        }
+        /* Typography Styles for Docs */
+        .doc-prose h1 { font-size: 2.25rem; font-weight: 800; color: #ffffff; margin-bottom: 1rem; margin-top: 1rem; letter-spacing: -0.025em; }
+        .doc-prose h2 { font-size: 1.5rem; font-weight: 700; color: #ffffff; margin-bottom: 1rem; margin-top: 3rem; padding-bottom: 0.5rem; border-bottom: 1px solid #1f2937; letter-spacing: -0.025em; }
+        .doc-prose h3 { font-size: 1.25rem; font-weight: 600; color: #e5e7eb; margin-bottom: 0.75rem; margin-top: 2rem; }
+        .doc-prose p { margin-bottom: 1.25rem; line-height: 1.75; font-size: 1rem; }
+        .doc-prose ul { margin-bottom: 1.25rem; padding-left: 1.5rem; list-style-type: disc; }
+        .doc-prose li { margin-bottom: 0.5rem; }
+        .doc-prose code { font-family: 'Fira Code', monospace; font-size: 0.875em; background-color: #1f2937; padding: 0.2em 0.4em; border-radius: 0.25rem; color: #e5e7eb; border: 1px solid #374151;}
+        .doc-prose pre { background-color: #1f2937; border: 1px solid #374151; border-radius: 0.5rem; padding: 1rem; overflow-x: auto; margin-bottom: 1.5rem; }
+        .doc-prose pre code { background-color: transparent; padding: 0; border: none; color: #d1d5db; }
 
-        /* Interactive Architecture Diagram Styles */
-        .arch-block {
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .arch-block:hover {
-            border-color: #bd93f9;
-            background-color: #f8fafc;
-        }
-        .arch-block.active {
-            border-color: #ff79c6;
-            background-color: #fff0f5;
-            box-shadow: 0 0 0 2px #ff79c6;
-        }
-        .connector-line {
-            height: 2px;
-            background-color: #cbd5e1;
-            flex-grow: 1;
-            position: relative;
-        }
-        .connector-arrow::after {
-            content: '►';
-            position: absolute;
-            right: -6px;
-            top: -8px;
-            color: #cbd5e1;
-            font-size: 12px;
-        }
+        /* Left Sidebar Active Link */
+        .left-nav-link.active { color: #3b82f6; font-weight: 500; }
+        
+        /* Right Sidebar Active Link */
+        .right-nav-link { border-left: 2px solid transparent; padding-left: 1rem; transition: all 0.2s; }
+        .right-nav-link.active { color: #3b82f6; border-left-color: #3b82f6; }
 
-        .step-active { border-color: #bd93f9; color: #282a36; font-weight: bold; }
-        .step-inactive { border-color: #e2e8f0; color: #94a3b8; }
+        /* Interactive Diagram */
+        .arch-block { cursor: pointer; transition: all 0.2s ease; border: 1px solid #374151; background-color: #1f2937; }
+        .arch-block:hover { border-color: #4b5563; background-color: #374151; }
+        .arch-block.active { border-color: #3b82f6; box-shadow: 0 0 0 1px #3b82f6; }
+        .connector-line { height: 2px; background-color: #374151; flex-grow: 1; position: relative; }
+        .connector-arrow::after { content: '►'; position: absolute; right: -6px; top: -8px; color: #374151; font-size: 12px; }
+
+        .chart-container { position: relative; width: 100%; max-width: 300px; height: 300px; margin: 0 auto; }
     </style>
 </head>
-<body class="text-slate-700">
+<body class="flex flex-col h-screen overflow-hidden antialiased selection:bg-blue-500 selection:text-white">
 
-    <!-- Navbar -->
-    <nav class="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div class="flex justify-between h-16 items-center">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-purple-600 to-pink-500">mnemo</span>
-                    <span class="bg-slate-100 text-slate-500 text-xs px-2 py-1 rounded-full font-mono">v1.0.1</span>
+    <!-- Top Navbar -->
+    <nav class="fixed z-50 w-full bg-gray-900 border-b border-gray-800 h-16 flex items-center justify-between px-4 lg:px-6">
+        <div class="flex items-center gap-6">
+            <!-- Mobile Menu Button -->
+            <button id="mobile-menu-btn" class="lg:hidden text-gray-400 hover:text-white focus:outline-none">
+                <span class="text-2xl">☰</span>
+            </button>
+            
+            <!-- Logo -->
+            <a href="#" class="flex items-center gap-2">
+                <span class="text-2xl font-bold text-white tracking-tight">mnemo</span>
+                <span class="bg-blue-900/50 text-blue-400 border border-blue-800/50 text-[10px] px-2 py-0.5 rounded-full font-medium ml-1">v1.0.1</span>
+            </a>
+            
+            <!-- Search Bar Mockup -->
+            <div class="hidden md:flex items-center bg-gray-800 border border-gray-700 rounded-lg px-3 py-1.5 w-64 lg:w-80 cursor-text hover:border-gray-600 transition-colors ml-4">
+                <div class="flex items-center text-gray-400 text-sm">
+                    <span class="mr-2 opacity-70">🔍</span>
+                    <span>Search</span>
                 </div>
-                <div class="hidden md:flex space-x-8">
-                    <a href="#overview" class="text-slate-600 hover:text-purple-600 transition-colors">Overview</a>
-                    <a href="#architecture" class="text-slate-600 hover:text-purple-600 transition-colors">Architecture</a>
-                    <a href="#features" class="text-slate-600 hover:text-purple-600 transition-colors">Features</a>
-                    <a href="#installation" class="text-slate-600 hover:text-purple-600 transition-colors">Installation</a>
-                    <a href="#files" class="text-slate-600 hover:text-purple-600 transition-colors">Files</a>
+                <div class="ml-auto">
+                    <kbd class="hidden sm:inline-block font-sans text-[10px] font-semibold text-gray-400 bg-gray-700 px-1.5 py-0.5 rounded border border-gray-600">CTRL K</kbd>
                 </div>
             </div>
+        </div>
+
+        <div class="hidden lg:flex items-center gap-6 text-sm font-medium text-gray-300">
+            <a href="#" class="hover:text-white transition-colors">Quickstart</a>
+            <a href="#architecture" class="hover:text-white transition-colors">Architecture</a>
+            <a href="#structure" class="hover:text-white transition-colors">Files</a>
+            <div class="w-px h-5 bg-gray-700"></div>
+            <a href="#" class="flex items-center gap-2 hover:text-white transition-colors bg-gray-800 px-3 py-1.5 rounded-lg border border-gray-700">
+                <span>⭐ GitHub</span>
+                <span class="bg-gray-700 text-gray-300 text-xs px-1.5 rounded">9.1k</span>
+            </a>
+            <a href="#" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg font-medium transition-colors">
+                Download & FAQ
+            </a>
         </div>
     </nav>
 
-    <!-- Main Content -->
-    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-16">
-
-        <!-- 1. Hero / Overview -->
-        <section id="overview" class="grid md:grid-cols-2 gap-12 items-center">
-            <div class="space-y-6">
-                <div class="inline-block bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-sm font-semibold mb-2">Technical Documentation</div>
-                <h1 class="text-4xl md:text-5xl font-bold text-slate-900 leading-tight">
-                    Elegant Markdown Editing <br>
-                    <span class="text-transparent bg-clip-text bg-gradient-to-r from-purple-600 to-pink-500">Powered by Python & Web</span>
-                </h1>
-                <p class="text-lg text-slate-600 leading-relaxed">
-                    **mnemo** is a hybrid desktop application that bridges the gap between Python's robust backend capabilities and the modern web's rendering power. It features real-time preview, KaTeX math support, and direct PDF export.
-                </p>
-                <div class="flex flex-wrap gap-4 pt-4">
-                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
-                        <span class="text-2xl">🐍</span>
-                        <div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">Backend</p>
-                            <p class="font-semibold text-slate-800">Python 3.10+</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
-                        <span class="text-2xl">🌐</span>
-                        <div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">Frontend</p>
-                            <p class="font-semibold text-slate-800">HTML5 / JS</p>
-                        </div>
-                    </div>
-                    <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-lg shadow-sm border border-slate-100">
-                        <span class="text-2xl">⚖️</span>
-                        <div>
-                            <p class="text-xs text-slate-500 uppercase font-bold">License</p>
-                            <p class="font-semibold text-slate-800">MIT</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- Tech Composition Chart -->
-            <div class="card p-6 border border-slate-100">
-                <h3 class="text-lg font-bold text-slate-800 mb-4 border-b border-slate-100 pb-2">Technical Composition</h3>
-                <div class="chart-container">
-                    <canvas id="techChart"></canvas>
-                </div>
-                <p class="text-center text-sm text-slate-500 mt-4">Based on file analysis and library distribution</p>
-            </div>
-        </section>
-
-        <!-- 2. Interactive Architecture -->
-        <section id="architecture" class="space-y-6">
-            <div class="max-w-3xl">
-                <h2 class="text-3xl font-bold text-slate-900">System Architecture</h2>
-                <p class="text-slate-600 mt-2">Explore the hybrid architecture. Click on any block below to understand how data flows from the user's keyboard to the rendered preview and PDF output.</p>
-            </div>
-
-            <div class="grid lg:grid-cols-3 gap-8">
-                <!-- Diagram Area -->
-                <div class="lg:col-span-2 bg-white p-8 rounded-xl border border-slate-200 shadow-sm relative overflow-hidden">
-                    <div class="absolute top-0 right-0 bg-slate-50 px-3 py-1 text-xs text-slate-400 font-mono rounded-bl-lg border-b border-l border-slate-200">Interactive Diagram</div>
-                    
-                    <!-- Frontend Layer -->
-                    <div class="mb-8 p-4 border-2 border-dashed border-blue-200 rounded-lg bg-blue-50/30">
-                        <h4 class="text-xs font-bold text-blue-500 uppercase mb-4 text-center">Frontend (Webview / Browser)</h4>
-                        <div class="flex justify-between items-center gap-4">
-                            <!-- CodeMirror -->
-                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('codemirror')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⌨️</div>
-                                <h5 class="font-bold text-slate-700">CodeMirror</h5>
-                                <p class="text-xs text-slate-500 mt-1">User Input</p>
-                            </div>
-                            
-                            <div class="connector-line connector-arrow"></div>
-
-                            <!-- JS Bridge -->
-                            <div class="arch-block w-1/3 bg-purple-50 p-4 rounded-lg border border-purple-300 shadow-sm text-center group" onclick="showArchDetail('bridge')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">🌉</div>
-                                <h5 class="font-bold text-purple-700">JS Bridge</h5>
-                                <p class="text-xs text-purple-500 mt-1">window.pywebview</p>
-                            </div>
-
-                            <div class="connector-line connector-arrow"></div>
-
-                            <!-- Preview DOM -->
-                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('preview')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">👁️</div>
-                                <h5 class="font-bold text-slate-700">Preview DOM</h5>
-                                <p class="text-xs text-slate-500 mt-1">KaTeX + Prism</p>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- IPC Gap -->
-                    <div class="flex justify-center mb-8">
-                        <div class="px-4 py-1 bg-slate-200 text-slate-600 text-xs rounded-full font-mono">IPC (Inter-Process Communication)</div>
-                    </div>
-
-                    <!-- Backend Layer -->
-                    <div class="p-4 border-2 border-dashed border-green-200 rounded-lg bg-green-50/30">
-                        <h4 class="text-xs font-bold text-green-600 uppercase mb-4 text-center">Backend (Python Process)</h4>
-                        <div class="flex justify-center gap-8">
-                            <!-- API Class -->
-                            <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('api')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">⚙️</div>
-                                <h5 class="font-bold text-slate-700">Api Class</h5>
-                                <p class="text-xs text-slate-500 mt-1">Core Logic</p>
-                            </div>
-
-                             <!-- Markdown Engine -->
-                             <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('markdown')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">📝</div>
-                                <h5 class="font-bold text-slate-700">MD Engine</h5>
-                                <p class="text-xs text-slate-500 mt-1">Python-Markdown</p>
-                            </div>
-
-                             <!-- OS Layer -->
-                             <div class="arch-block w-1/3 bg-white p-4 rounded-lg border border-slate-300 shadow-sm text-center group" onclick="showArchDetail('os')">
-                                <div class="text-2xl mb-2 group-hover:scale-110 transition-transform">💾</div>
-                                <h5 class="font-bold text-slate-700">OS / IO</h5>
-                                <p class="text-xs text-slate-500 mt-1">Files & PDFKit</p>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Main Layout Wrapper -->
+    <div class="flex flex-1 pt-16 overflow-hidden">
+        
+        <!-- Left Sidebar Navigation -->
+        <aside id="sidebar" class="fixed inset-y-0 left-0 z-40 w-64 pt-16 bg-gray-900 border-r border-gray-800 transform -translate-x-full lg:translate-x-0 transition-transform duration-300 lg:relative">
+            <div class="h-full overflow-y-auto px-4 py-6">
+                
+                <!-- Mobile Search (Visible only on mobile inside sidebar) -->
+                <div class="md:hidden mb-6 relative">
+                    <span class="absolute left-3 top-2 text-gray-400 text-sm">🔍</span>
+                    <input type="text" placeholder="Search" class="w-full pl-8 pr-3 py-2 bg-gray-800 border border-gray-700 rounded-lg text-sm text-gray-300 focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500">
                 </div>
 
-                <!-- Detail Panel -->
-                <div class="lg:col-span-1 bg-slate-800 text-white p-6 rounded-xl shadow-lg flex flex-col justify-center">
-                    <div id="arch-detail-content" class="space-y-4">
-                        <div class="w-12 h-12 bg-purple-500 rounded-lg flex items-center justify-center text-2xl mb-4">ℹ️</div>
-                        <h3 class="text-xl font-bold text-purple-300">Architecture Explorer</h3>
-                        <p class="text-slate-300 text-sm leading-relaxed">
-                            Click on any component in the diagram to view its specific role, source file location, and technical implementation details.
-                        </p>
-                        <div class="mt-8 p-4 bg-slate-700/50 rounded border border-slate-600">
-                            <h4 class="font-bold text-xs text-slate-400 uppercase mb-2">Main Flow</h4>
-                            <ul class="text-sm space-y-2 font-mono text-green-300">
-                                <li>1. User types in CodeMirror</li>
-                                <li>2. JS calls pywebview.api</li>
-                                <li>3. Python processes Markdown</li>
-                                <li>4. HTML is returned to JS</li>
-                                <li>5. KaTeX processes Math</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 3. Features & Shortcuts -->
-        <section id="features" class="bg-slate-50 p-8 rounded-2xl border border-slate-200">
-            <div class="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
-                <div>
-                    <h2 class="text-3xl font-bold text-slate-900">Features and Shortcuts</h2>
-                    <p class="text-slate-600 mt-2">Master the editor with these shortcuts and capabilities.</p>
-                </div>
-                <div class="flex gap-2">
-                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500 active-filter" onclick="filterFeatures('all', this)">All</button>
-                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500" onclick="filterFeatures('shortcut', this)">Shortcuts</button>
-                    <button class="px-4 py-2 bg-white border border-slate-300 rounded-lg text-sm font-medium hover:bg-slate-50 focus:ring-2 focus:ring-purple-500" onclick="filterFeatures('core', this)">Core Features</button>
-                </div>
-            </div>
-
-            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6" id="feature-grid">
-                <!-- Features generated by JS -->
-            </div>
-        </section>
-
-        <!-- 4. Installation & Setup -->
-        <section id="installation">
-            <h2 class="text-3xl font-bold text-slate-900 mb-8">Installation Process</h2>
-            <div class="bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-                <!-- Stepper Header -->
-                <div class="flex border-b border-slate-200 overflow-x-auto">
-                    <button onclick="setStep(0)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 transition-colors step-active" id="step-btn-0">1. Prerequisites</button>
-                    <button onclick="setStep(1)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-1">2. Clone & Sync</button>
-                    <button onclick="setStep(2)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-2">3. Static Assets</button>
-                    <button onclick="setStep(3)" class="step-btn whitespace-nowrap px-6 py-4 text-center text-sm font-medium border-b-2 border-transparent hover:bg-slate-50 transition-colors step-inactive" id="step-btn-3">4. Run</button>
-                </div>
-
-                <!-- Step Content -->
-                <div class="p-8 min-h-[300px] flex items-center">
-                    <!-- Step 0 -->
-                    <div class="step-content w-full" id="step-0">
-                        <div class="flex gap-6 items-start">
-                            <div class="bg-purple-100 p-3 rounded-lg text-2xl">📦</div>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-slate-800 mb-2">System Prerequisites</h3>
-                                <p class="text-slate-600 mb-4">Ensure your system is ready for Python 3.10+ development and PDF generation.</p>
-                                <div class="grid md:grid-cols-2 gap-4">
-                                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
-                                        <h4 class="font-bold text-slate-700 text-sm mb-2">Install 'uv' Manager</h4>
-                                        <code class="block bg-slate-800 text-green-400 p-2 rounded text-xs font-mono">curl -LsSf https://astral.sh/uv/install.sh | sh</code>
-                                    </div>
-                                    <div class="bg-slate-50 p-4 rounded border border-slate-200">
-                                        <h4 class="font-bold text-slate-700 text-sm mb-2">PDF Engine</h4>
-                                        <code class="block bg-slate-800 text-green-400 p-2 rounded text-xs font-mono">sudo apt install wkhtmltopdf</code>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 1 -->
-                    <div class="step-content w-full hidden" id="step-1">
-                        <div class="flex gap-6 items-start">
-                            <div class="bg-blue-100 p-3 rounded-lg text-2xl">⬇️</div>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-slate-800 mb-2">Clone & Sync</h3>
-                                <p class="text-slate-600 mb-4">Get the source code and let 'uv' manage the Python environment and dependencies (pdfkit, pywebview, etc).</p>
-                                <pre class="bg-slate-800 text-slate-200 p-4 rounded-lg font-mono text-sm overflow-x-auto"><code>git clone https://github.com/your-username/mnemo.git
-cd mnemo
-uv sync  <span class="text-slate-500"># Creates venv & installs deps from uv.lock</span></code></pre>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 2 -->
-                    <div class="step-content w-full hidden" id="step-2">
-                        <div class="flex gap-6 items-start">
-                            <div class="bg-yellow-100 p-3 rounded-lg text-2xl">⚡</div>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-slate-800 mb-2">Download Static Assets</h3>
-                                <p class="text-slate-600 mb-4">Mnemo is designed to run offline. The provided shell script fetches Tailwind, CodeMirror, and KaTeX from CDNs to the local folder.</p>
-                                <div class="bg-slate-50 p-4 rounded border border-slate-200 mb-4">
-                                    <p class="text-xs font-bold text-slate-500 uppercase mb-2">Script Action: download_front_libs.sh</p>
-                                    <ul class="text-sm space-y-1 list-disc pl-4 text-slate-700">
-                                        <li>Creates <code>frontend/libs</code> folder</li>
-                                        <li>Downloads <code>tailwind.min.js</code>, <code>prism.js</code>, etc.</li>
-                                        <li>Downloads & Unzips the <code>KaTeX</code> release</li>
-                                    </ul>
-                                </div>
-                                <code class="block bg-slate-800 text-green-400 p-3 rounded text-sm font-mono">
-                                    chmod +x scripts/download_front_libs.sh<br>
-                                    ./scripts/download_front_libs.sh
-                                </code>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Step 3 -->
-                    <div class="step-content w-full hidden" id="step-3">
-                        <div class="flex gap-6 items-start">
-                            <div class="bg-green-100 p-3 rounded-lg text-2xl">🚀</div>
-                            <div class="flex-1">
-                                <h3 class="text-xl font-bold text-slate-800 mb-2">Run the Application</h3>
-                                <p class="text-slate-600 mb-4">Launch the editor. Use 'uv run' to ensure the correct virtual environment context is used.</p>
-                                <code class="block bg-slate-800 text-green-400 p-4 rounded text-lg font-mono text-center">uv run mnemo</code>
-                                <div class="mt-6 p-4 bg-orange-50 border border-orange-200 rounded text-orange-800 text-sm">
-                                    <strong>Tip:</strong> If PDF export fails, verify that <code>wkhtmltopdf</code> is in your system PATH.
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="mb-8">
+                    <h5 class="px-3 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">Introduction</h5>
+                    <ul class="space-y-1 text-sm">
+                        <li><a href="#introduction" class="left-nav-link block px-3 py-2 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">Home / Quickstart</a></li>
+                        <li><a href="#features" class="left-nav-link block px-3 py-2 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">Features</a></li>
+                    </ul>
                 </div>
                 
-                <!-- Stepper Footer -->
-                <div class="bg-slate-50 p-4 flex justify-between border-t border-slate-200">
-                    <button onclick="changeStep(-1)" class="px-4 py-2 rounded text-slate-600 hover:bg-slate-200 disabled:opacity-50" id="prev-btn" disabled>Previous</button>
-                    <button onclick="changeStep(1)" class="px-4 py-2 bg-slate-800 text-white rounded hover:bg-slate-700 disabled:opacity-50" id="next-btn">Next Step</button>
-                </div>
-            </div>
-        </section>
-
-        <!-- 5. File Structure Tree -->
-        <section id="files" class="grid lg:grid-cols-2 gap-8">
-            <div>
-                <h2 class="text-3xl font-bold text-slate-900 mb-4">Project Structure</h2>
-                <p class="text-slate-600 mb-6">Navigate the file tree to understand the purpose of each component in the repository.</p>
-                <div class="bg-white rounded-xl border border-slate-200 p-6 shadow-sm overflow-x-auto">
-                    <ul class="space-y-2 font-mono text-sm" id="file-tree">
-                        <!-- Populated by JS -->
+                <div class="mb-8">
+                    <h5 class="px-3 mb-3 text-xs font-semibold text-gray-400 uppercase tracking-wider">System Guides</h5>
+                    <ul class="space-y-1 text-sm">
+                        <li><a href="#architecture" class="left-nav-link block px-3 py-2 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">IPC Architecture</a></li>
+                        <li><a href="#installation" class="left-nav-link block px-3 py-2 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">Installation (NPM/UV)</a></li>
+                        <li><a href="#structure" class="left-nav-link block px-3 py-2 text-gray-300 hover:bg-gray-800 hover:text-white rounded-lg transition-colors">File Tree</a></li>
                     </ul>
                 </div>
             </div>
-            <div class="bg-slate-900 rounded-xl p-6 text-slate-300 shadow-lg flex flex-col justify-center min-h-[250px]">
-                <div id="file-detail-content">
-                    <h3 class="text-xl font-bold text-white mb-2">Select a file</h3>
-                    <p class="text-slate-400">Click on any file in the tree to view its role and main contents.</p>
-                </div>
+        </aside>
+
+        <!-- Overlay for mobile sidebar -->
+        <div id="sidebar-overlay" class="fixed inset-0 bg-gray-900/80 z-30 hidden lg:hidden backdrop-blur-sm"></div>
+
+        <!-- Center Content Area -->
+        <main id="main-content" class="flex-1 h-full overflow-y-auto scroll-smooth">
+            <div class="w-full max-w-4xl mx-auto px-6 py-8 lg:px-10 lg:py-12 doc-prose pb-32">
+                
+                <!-- 1. Introduction -->
+                <section id="introduction" class="scroll-mt-24">
+                    <h1>mnemo - Quickstart</h1>
+                    <p class="text-xl text-gray-400 font-light mb-8">
+                        Start using mnemo, an elegant hybrid Markdown editor, by understanding its Python and Web-based architecture.
+                    </p>
+                    <p>
+                        <strong>mnemo</strong> is a desktop application focused on productivity and typography. It combines the lightness of a web interface (built with Tailwind CSS) with the robustness of Python processing. Unlike heavy Electron-based editors, mnemo leverages the <code>pywebview</code> library.
+                    </p>
+
+                    <div class="flex flex-col md:flex-row gap-6 mt-8">
+                        <div class="flex-1">
+                            <h3>Seamless Integration</h3>
+                            <p>Mnemo shares the native operating system's web engine (WebKit/GTK on Linux) while executing all the heavy lifting of Markdown conversion and direct PDF export within a lightweight Python process.</p>
+                            
+                            <div class="bg-gray-800 border border-gray-700 rounded-lg p-5 mt-6 shadow-sm">
+                                <h4 class="font-semibold text-white mb-3">Requirements & Metadata</h4>
+                                <ul class="text-sm m-0 space-y-2 text-gray-300">
+                                    <li><strong class="text-gray-100">License:</strong> MIT</li>
+                                    <li><strong class="text-gray-100">Environment:</strong> <code>uv</code> (Fast Python Package Manager)</li>
+                                    <li><strong class="text-gray-100">PDF Engine:</strong> <code>wkhtmltopdf</code> via pdfkit</li>
+                                </ul>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full md:w-[280px] bg-gray-800 border border-gray-700 shadow-sm rounded-xl p-5 flex flex-col justify-center">
+                            <h4 class="text-center text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Stack Composition</h4>
+                            <div class="chart-container h-[180px]">
+                                <canvas id="techChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 2. Architecture -->
+                <section id="architecture" class="scroll-mt-24">
+                    <h2>Hybrid Architecture (IPC)</h2>
+                    <p>
+                        The application is divided into two main processes communicating via IPC (Inter-Process Communication). 
+                        The graphical interface (HTML/JS) captures input, and the backend (Python) handles rendering.
+                    </p>
+                    
+                    <div class="flex items-start gap-3 p-4 mb-6 text-sm text-blue-200 bg-blue-900/30 border border-blue-800/50 rounded-lg">
+                        <span class="text-xl">💡</span>
+                        <div>
+                            <span class="font-bold text-blue-400">Tip:</span> Click on the diagram blocks below to view the detailed technical explanation and the code responsible for the Python to JavaScript communication.
+                        </div>
+                    </div>
+
+                    <!-- Interactive Widget Dark Mode -->
+                    <div class="mt-8 border border-gray-700 rounded-xl overflow-hidden bg-gray-900/50 shadow-inner">
+                        <div class="p-6 md:p-8 flex flex-col md:flex-row items-center justify-between gap-4">
+                            <!-- Frontend -->
+                            <div class="arch-block flex-1 p-5 rounded-lg text-center w-full shadow-sm" onclick="showArchDetail('frontend')">
+                                <span class="text-4xl block mb-3 opacity-90">🌐</span>
+                                <h4 class="font-bold text-sm text-gray-200">Frontend (JS)</h4>
+                                <p class="text-[10px] text-gray-500 uppercase mt-2 font-semibold tracking-wider">CodeMirror + KaTeX</p>
+                            </div>
+
+                            <!-- IPC Bridge -->
+                            <div class="hidden md:flex flex-col items-center">
+                                <span class="text-xs font-mono text-gray-500 mb-2">pywebview.api</span>
+                                <div class="flex items-center w-24">
+                                    <div class="connector-line"></div>
+                                    <span class="text-xl mx-2 opacity-50">🌉</span>
+                                    <div class="connector-line connector-arrow"></div>
+                                </div>
+                            </div>
+
+                            <!-- Backend -->
+                            <div class="arch-block flex-1 p-5 rounded-lg text-center w-full shadow-sm" onclick="showArchDetail('backend')">
+                                <span class="text-4xl block mb-3 opacity-90">🐍</span>
+                                <h4 class="font-bold text-sm text-gray-200">Backend (Python)</h4>
+                                <p class="text-[10px] text-gray-500 uppercase mt-2 font-semibold tracking-wider">Api Class + Markdown</p>
+                            </div>
+                        </div>
+
+                        <!-- Details Output -->
+                        <div id="arch-details" class="bg-gray-800 text-gray-300 p-6 md:px-8 border-t border-gray-700 transition-all duration-300 min-h-[140px] flex items-center justify-center">
+                            <div class="text-center text-gray-500 text-sm italic">Select a block above to inspect.</div>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 3. Features and Shortcuts -->
+                <section id="features" class="scroll-mt-24">
+                    <h2>Features and Shortcuts</h2>
+                    <p>The <code>script.js</code> file implements global listeners to optimize workflow. The application is designed to be operated primarily via keyboard.</p>
+                    
+                    <div class="border border-gray-700 rounded-lg overflow-hidden mt-6 bg-gray-800 shadow-sm">
+                        <div class="bg-gray-800/80 px-4 py-3 border-b border-gray-700 flex gap-2 overflow-x-auto">
+                            <button class="text-xs font-medium px-3 py-1.5 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors focus:ring-2 focus:ring-blue-500" onclick="filterTable('all')">View All</button>
+                            <button class="text-xs font-medium px-3 py-1.5 bg-gray-900 border border-gray-700 text-gray-400 rounded hover:text-white transition-colors focus:ring-2 focus:ring-blue-500" onclick="filterTable('System')">Files & OS</button>
+                            <button class="text-xs font-medium px-3 py-1.5 bg-gray-900 border border-gray-700 text-gray-400 rounded hover:text-white transition-colors focus:ring-2 focus:ring-blue-500" onclick="filterTable('Layout')">Layout Navigation</button>
+                        </div>
+                        <div class="overflow-x-auto">
+                            <table class="w-full text-left text-sm" id="shortcuts-table">
+                                <thead class="bg-gray-900/50 text-gray-400 uppercase text-xs">
+                                    <tr>
+                                        <th class="px-6 py-4 font-semibold">Action</th>
+                                        <th class="px-6 py-4 font-semibold">Description</th>
+                                        <th class="px-6 py-4 font-semibold w-40">Keys</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-gray-700">
+                                    <tr class="hover:bg-gray-700/50 transition-colors" data-cat="System">
+                                        <td class="px-6 py-4 font-medium text-gray-200">Open Document</td>
+                                        <td class="px-6 py-4 text-gray-400">Invokes the native system file dialog via GTK.</td>
+                                        <td class="px-6 py-4"><kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">Ctrl</kbd> + <kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">O</kbd></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700/50 transition-colors" data-cat="System">
+                                        <td class="px-6 py-4 font-medium text-gray-200">Save Changes</td>
+                                        <td class="px-6 py-4 text-gray-400">Writes current content to local disk.</td>
+                                        <td class="px-6 py-4"><kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">Ctrl</kbd> + <kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">S</kbd></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700/50 transition-colors" data-cat="System">
+                                        <td class="px-6 py-4 font-medium text-gray-200">Export to PDF</td>
+                                        <td class="px-6 py-4 text-gray-400">Processes HTML and generates PDF via wkhtmltopdf.</td>
+                                        <td class="px-6 py-4"><kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">Ctrl</kbd> + <kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">P</kbd></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700/50 transition-colors" data-cat="Layout">
+                                        <td class="px-6 py-4 font-medium text-gray-200">Visual Focus: Preview</td>
+                                        <td class="px-6 py-4 text-gray-400">Switches focus to the formatted preview panel.</td>
+                                        <td class="px-6 py-4"><kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">Ctrl</kbd> + <kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">←</kbd></td>
+                                    </tr>
+                                    <tr class="hover:bg-gray-700/50 transition-colors" data-cat="Layout">
+                                        <td class="px-6 py-4 font-medium text-gray-200">Visual Focus: Editor</td>
+                                        <td class="px-6 py-4 text-gray-400">Switches focus to the raw source code panel.</td>
+                                        <td class="px-6 py-4"><kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">Ctrl</kbd> + <kbd class="bg-gray-700 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-gray-300 font-mono">→</kbd></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- 4. Installation -->
+                <section id="installation" class="scroll-mt-24">
+                    <h2>Installation via NPM/UV</h2>
+                    <p>Ensure you have Python 3.10+ configured on your system. Use the <code>uv</code> manager for ultra-fast dependency synchronization.</p>
+
+                    <!-- Flowbite Style Stepper -->
+                    <ol class="relative border-l border-gray-700 ml-3 mt-8 space-y-8">                  
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-800 rounded-full -left-3 ring-4 ring-gray-900 border border-gray-700">
+                                <span class="text-blue-500 font-bold text-xs">1</span>
+                            </span>
+                            <h3 class="flex items-center mb-1 text-lg font-semibold text-white mt-0">Prepare Local Dependencies</h3>
+                            <p class="mb-3 text-sm font-normal text-gray-400">Install necessary system packages (e.g., Ubuntu/Debian).</p>
+                            <pre><code>sudo apt install wkhtmltopdf
+curl -LsSf https://astral.sh/uv/install.sh | sh</code></pre>
+                        </li>
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-800 rounded-full -left-3 ring-4 ring-gray-900 border border-gray-700">
+                                <span class="text-blue-500 font-bold text-xs">2</span>
+                            </span>
+                            <h3 class="mb-1 text-lg font-semibold text-white mt-0">Clone Repository</h3>
+                            <p class="mb-3 text-sm font-normal text-gray-400">Get the code and let <code>uv</code> create the isolated virtual environment based on `uv.lock`.</p>
+                            <pre><code>git clone https://github.com/your-username/mnemo.git
+cd mnemo
+uv sync</code></pre>
+                        </li>
+                        <li class="ml-6">
+                            <span class="absolute flex items-center justify-center w-6 h-6 bg-gray-800 rounded-full -left-3 ring-4 ring-gray-900 border border-gray-700">
+                                <span class="text-blue-500 font-bold text-xs">3</span>
+                            </span>
+                            <h3 class="mb-1 text-lg font-semibold text-white mt-0">Cache Frontend Libraries</h3>
+                            <p class="mb-3 text-sm font-normal text-gray-400">mnemo runs offline. Download CodeMirror, Tailwind, and KaTeX by running the dedicated script.</p>
+                            <pre><code>chmod +x scripts/download_front_libs.sh
+./scripts/download_front_libs.sh</code></pre>
+                        </li>
+                    </ol>
+                </section>
+
+                <!-- 5. File Structure -->
+                <section id="structure" class="scroll-mt-24">
+                    <h2>Structure and Files</h2>
+                    <p>The repository consists of build scripts, a lightweight web interface, and a backend bridging the OS to the webview engine.</p>
+
+                    <div class="grid md:grid-cols-5 gap-0 mt-6 border border-gray-700 rounded-xl overflow-hidden bg-gray-800 shadow-sm">
+                        <!-- Tree -->
+                        <div class="md:col-span-2 p-5 border-b md:border-b-0 md:border-r border-gray-700 bg-gray-900/50 overflow-x-auto max-h-[400px]">
+                            <ul class="text-sm font-mono space-y-1.5" id="doc-file-tree">
+                                <!-- JS Populated -->
+                            </ul>
+                        </div>
+                        <!-- Details -->
+                        <div class="md:col-span-3 p-6 flex flex-col justify-center bg-gray-800">
+                            <div id="file-doc-content" class="text-left w-full">
+                                <span class="text-3xl block mb-4 opacity-40">📝</span>
+                                <h4 class="text-lg font-semibold text-white mb-2">Select an item</h4>
+                                <p class="text-gray-400 text-sm">Click on a file or folder in the tree to the left to understand its role in the application context.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
             </div>
-        </section>
+            
+            <!-- Footer -->
+            <footer class="mt-16 border-t border-gray-800 bg-gray-900 py-8 text-center text-sm text-gray-500">
+                <p class="mt-2">© 2026 thigoai. • MIT License</p>
+            </footer>
+        </main>
 
-    </main>
+        <!-- Right Sidebar (Table of Contents) -->
+        <aside class="hidden xl:block w-64 pt-8 pb-10 px-6 overflow-y-auto">
+            <h5 class="text-xs font-semibold text-gray-300 uppercase tracking-widest mb-4">On This Page</h5>
+            <ul class="space-y-2.5 text-sm text-gray-500 font-medium">
+                <li><a href="#introduction" class="right-nav-link block hover:text-gray-300">Quickstart</a></li>
+                <li><a href="#architecture" class="right-nav-link block hover:text-gray-300">Hybrid Architecture</a></li>
+                <li><a href="#features" class="right-nav-link block hover:text-gray-300">Features and Shortcuts</a></li>
+                <li><a href="#installation" class="right-nav-link block hover:text-gray-300">Installation (NPM/UV)</a></li>
+                <li><a href="#structure" class="right-nav-link block hover:text-gray-300">Structure and Files</a></li>
+            </ul>
+        </aside>
 
-    <footer class="bg-white border-t border-slate-200 mt-16 py-8">
-        <div class="max-w-7xl mx-auto px-4 text-center">
-            <p class="text-slate-500">Interactive Documentation Generated for <span class="font-bold text-slate-700">mnemo</span></p>
-            <p class="text-slate-400 text-sm mt-2">© 2026 Thiago F. | MIT License</p>
-        </div>
-    </footer>
+    </div>
 
     <script>
         // --- Data ---
-        const archDetails = {
-            'codemirror': {
-                title: 'CodeMirror Editor (Frontend)',
-                desc: 'The visual markdown editor. Configured in `script.js` with the Dracula theme.',
-                tech: ['JavaScript', 'CSS', 'DOM Event: change', 'DOM Event: scroll'],
-                file: 'frontend/script.js',
-                code: 'editor.on("change", async () => { ... })'
+        const archInfo = {
+            frontend: {
+                title: "Presentation Layer (Frontend)",
+                tech: "JavaScript, HTML, CSS, CodeMirror, KaTeX",
+                desc: "Manages the user interface. Captures keyboard events (shortcuts) and CodeMirror changes. Calls the Python API asynchronously via <code>window.pywebview.api</code> and inserts the returned HTML into the preview div, processing math with KaTeX.",
+                code: "const html = await pywebview.api.render_markdown(content);\npreview.innerHTML = html;\nrenderMathInElement(preview, {...});"
             },
-            'bridge': {
-                title: 'JS Bridge (IPC)',
-                desc: 'The communication channel provided by PyWebView. Allows JS to call Python methods asynchronously.',
-                tech: ['window.pywebview.api', 'Promise/Async'],
-                file: 'frontend/script.js',
-                code: 'await pywebview.api.render_markdown(content)'
-            },
-            'preview': {
-                title: 'Preview Renderer',
-                desc: 'Receives HTML from Python. KaTeX processes math delimiters ($$) and Prism highlights code blocks.',
-                tech: ['KaTeX', 'Prism.js', 'HTML DOM'],
-                file: 'frontend/script.js',
-                code: 'renderMathInElement(preview, ...)'
-            },
-            'api': {
-                title: 'Api Class (Backend)',
-                desc: 'The Python class exposed to JS. Handles logic that requires system access or Python libraries.',
-                tech: ['Python Class', 'IPC Handler'],
-                file: 'main.py',
-                code: 'class Api:\n  def render_markdown(self, text)...'
-            },
-            'markdown': {
-                title: 'Markdown Engine',
-                desc: 'Converts Markdown text to HTML. Uses pymdown-extensions for advanced features like Arithmatex (Math).',
-                tech: ['Markdown Library', 'pymdown-extensions'],
-                file: 'main.py',
-                code: "extensions=['extra', 'pymdownx.arithmatex']"
-            },
-            'os': {
-                title: 'OS & IO Operations',
-                desc: 'Handles Open/Save File dialogs and PDF generation via system binaries (wkhtmltopdf).',
-                tech: ['os', 'pdfkit', 'webview.create_file_dialog'],
-                file: 'main.py',
-                code: "pdfkit.from_string(full_html, path)"
+            backend: {
+                title: "Logic Layer (Backend)",
+                tech: "Python 3.10+, pywebview, pdfkit",
+                desc: "The <code>Api</code> class is instantiated and exposed to the pywebview window. It handles system calls (GTK dialogs on Linux) and intensive Markdown conversion using configured extensions, as well as compiling the final PDF.",
+                code: "class Api:\n  def render_markdown(self, text):\n    return markdown.markdown(text, extensions=['extra', 'pymdownx.arithmatex'])"
             }
         };
 
-        const features = [
-            { type: 'shortcut', icon: '📂', title: 'Open File', desc: 'Trigger the file system dialog to load .md files.', keys: ['Ctrl', 'O'] },
-            { type: 'shortcut', icon: '💾', title: 'Save File', desc: 'Write current editor content to disk.', keys: ['Ctrl', 'S'] },
-            { type: 'shortcut', icon: '🖨️', title: 'Export PDF', desc: 'Generate styled PDF via wkhtmltopdf.', keys: ['Ctrl', 'P'] },
-            { type: 'shortcut', icon: '⬅️', title: 'Focus Preview', desc: 'Shift navigation focus or view to the left.', keys: ['Ctrl', 'Left'] },
-            { type: 'shortcut', icon: '➡️', title: 'Focus Editor', desc: 'Shift navigation focus or view to the right.', keys: ['Ctrl', 'Right'] },
-            { type: 'core', icon: '🧮', title: 'Math Support', desc: 'Render LaTeX equations using KaTeX ($E=mc^2$).', keys: [] },
-            { type: 'core', icon: '💅', title: 'Syntax Highlight', desc: 'Prism.js support for code blocks in markdown.', keys: [] },
-            { type: 'core', icon: '🌗', title: 'Split View', desc: 'Real-time side-by-side editing and preview.', keys: [] }
-        ];
-
-        const fileStructure = [
+        const fileData = [
             { name: 'mnemo/', type: 'folder', children: [
                 { name: 'frontend/', type: 'folder', children: [
-                    { name: 'libs/', type: 'folder', desc: 'Downloaded static resources (Tailwind, KaTeX, Prism).' },
-                    { name: 'index.html', type: 'file', desc: 'Main UI structure. Links CSS/JS and defines the split-pane layout.' },
-                    { name: 'script.js', type: 'file', desc: 'Frontend Logic: CodeMirror Init, Scroll Sync, IPC Calls, KaTeX Rendering.' }
+                    { name: 'index.html', desc: 'Defines the flexible split layout. Loads static CSS/JS. Contains no heavy logic.' },
+                    { name: 'script.js', desc: 'Controls view states (previewState: 0, 1, 2) and bridges (IPC) with Python.' },
+                    { name: 'libs/', desc: 'Git-ignored folder generated by the download script. Contains minified Tailwind and KaTeX binaries.' }
                 ]},
-                { name: 'src/mnemo/', type: 'folder', children: [
-                    { name: 'main.py', type: 'file', desc: 'Entry point. Configures the PyWebview window, API class, and PDF export logic.' }
-                ]},
+                { name: 'src/mnemo/main.py', type: 'file', desc: 'Python entry point. Sets up environment variables (GTK), resolves relative resource paths (Dev vs Prod), and initializes the webview window with size limits.' },
                 { name: 'scripts/', type: 'folder', children: [
-                    { name: 'download_front_libs.sh', type: 'file', desc: 'Bash script to download necessary JS/CSS libraries for offline use.' },
-                    { name: 'make_deb.sh', type: 'file', desc: 'Build automation to package the app into a .deb installer.' }
+                    { name: 'make_deb.sh', desc: 'Build script. Cleans old installations, creates Debian hierarchy (/usr/bin, /usr/share), generates metadata control, and packages the final .deb file.' },
+                    { name: 'download_front_libs.sh', desc: 'Uses `curl` and `unzip` to fetch offline versions of static JS libraries like Prism and KaTeX, ensuring mnemo works without an external connection.' }
                 ]},
-                { name: 'pyproject.toml', type: 'file', desc: 'Project configuration. Defines dependencies and build system (hatchling).' },
-                { name: 'uv.lock', type: 'file', desc: 'Exact dependency versions locked by uv.' }
+                { name: 'pyproject.toml', type: 'file', desc: 'Standard uv/hatchling configuration. Defines metadata and strict dependencies like `pdfkit>=1.0.0` and `pywebview>=5.0`.' }
             ]}
         ];
 
         // --- Logic ---
 
-        // 1. Chart Initialization
+        // 1. Chart
         document.addEventListener('DOMContentLoaded', () => {
             const ctx = document.getElementById('techChart').getContext('2d');
             new Chart(ctx, {
                 type: 'doughnut',
                 data: {
-                    labels: ['Backend (Python)', 'Frontend (JS/HTML/CSS)', 'Packaging (Shell)', 'Config (TOML)'],
+                    labels: ['Python (Backend)', 'Web (UI)', 'Shell (Build)'],
                     datasets: [{
-                        data: [35, 45, 15, 5],
-                        backgroundColor: ['#bd93f9', '#ff79c6', '#50fa7b', '#f1fa8c'],
-                        borderWidth: 0
+                        data: [40, 45, 15],
+                        backgroundColor: ['#3b82f6', '#10b981', '#6b7280'], // Blue, Emerald, Gray
+                        borderWidth: 1,
+                        borderColor: '#1f2937', // Matches bg-gray-800
+                        hoverOffset: 4
                     }]
                 },
                 options: {
                     responsive: true,
                     maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'bottom', labels: { usePointStyle: true } }
+                    plugins: { 
+                        legend: { 
+                            position: 'bottom', 
+                            labels: { 
+                                boxWidth: 12, 
+                                font: { family: 'Inter', size: 11 },
+                                color: '#9ca3af' // Matches text-gray-400
+                            } 
+                        } 
                     },
-                    cutout: '70%'
+                    cutout: '75%'
                 }
             });
 
-            // Initialize other components
-            renderFeatures('all');
-            renderFileTree(fileStructure, document.getElementById('file-tree'));
+            renderDocTree(fileData, document.getElementById('doc-file-tree'), 0);
+            setupScrollSpy();
         });
 
-        // 2. Architecture Interaction
-        function showArchDetail(key) {
-            const data = archDetails[key];
-            const container = document.getElementById('arch-detail-content');
+        // 2. Interactive Architecture
+        function showArchDetail(target) {
+            const info = archInfo[target];
             
-            // Highlight block
             document.querySelectorAll('.arch-block').forEach(el => el.classList.remove('active'));
             event.currentTarget.classList.add('active');
 
-            // Update Content
+            const container = document.getElementById('arch-details');
             container.innerHTML = `
-                <div class="flex items-center gap-3 mb-4">
-                     <span class="text-3xl bg-slate-700 w-12 h-12 flex items-center justify-center rounded-lg shadow-inner">${getKeyIcon(key)}</span>
-                     <div>
-                        <h3 class="text-xl font-bold text-purple-300">${data.title}</h3>
-                        <span class="text-xs bg-slate-700 px-2 py-1 rounded text-slate-300 font-mono">${data.file}</span>
-                     </div>
-                </div>
-                <p class="text-slate-300 text-sm leading-relaxed border-b border-slate-700 pb-4">${data.desc}</p>
-                
-                <div class="space-y-3">
-                    <div>
-                        <h4 class="font-bold text-xs text-slate-500 uppercase mb-2">Technologies</h4>
-                        <div class="flex flex-wrap gap-2">
-                            ${data.tech.map(t => `<span class="text-xs bg-slate-700 text-slate-200 px-2 py-1 rounded border border-slate-600">${t}</span>`).join('')}
-                        </div>
+                <div class="w-full text-left animate-fade-in">
+                    <div class="flex items-center gap-2 mb-3">
+                        <span class="text-[10px] font-mono bg-blue-900/50 text-blue-400 px-2 py-1 rounded border border-blue-800/50 uppercase tracking-wider font-semibold">${target}</span>
+                        <h4 class="font-bold text-white text-base">${info.title}</h4>
                     </div>
-                    <div>
-                        <h4 class="font-bold text-xs text-slate-500 uppercase mb-2">Code Snippet</h4>
-                        <pre class="bg-slate-950 p-3 rounded border-l-2 border-green-400 text-xs font-mono text-green-300 overflow-x-auto"><code>${data.code}</code></pre>
+                    <p class="text-sm text-gray-400 mb-4 leading-relaxed">${info.desc}</p>
+                    <div class="bg-gray-900/80 p-3 rounded-md border border-gray-700 font-mono text-xs text-blue-300 overflow-x-auto shadow-inner">
+                        <pre class="!m-0 !p-0 !border-none !bg-transparent"><code class="!border-none !p-0 !text-blue-300">${info.code}</code></pre>
                     </div>
                 </div>
             `;
-            container.classList.add('animate-fade-in');
         }
 
-        function getKeyIcon(key) {
-            const icons = { 'codemirror': '⌨️', 'bridge': '🌉', 'preview': '👁️', 'api': '⚙️', 'markdown': '📝', 'os': '💾' };
-            return icons[key] || '📦';
-        }
-
-        // 3. Feature Filtering
-        function renderFeatures(filter) {
-            const grid = document.getElementById('feature-grid');
-            grid.innerHTML = '';
-            
-            const filtered = filter === 'all' ? features : features.filter(f => f.type === filter);
-            
-            filtered.forEach(f => {
-                const keysHtml = f.keys.length ? 
-                    `<div class="flex gap-1 mt-3">
-                        ${f.keys.map(k => `<kbd class="px-2 py-1 bg-slate-100 border-b-2 border-slate-300 rounded text-xs font-bold text-slate-600 font-mono">${k}</kbd>`).join('')}
-                    </div>` : '';
-
-                const card = document.createElement('div');
-                card.className = 'card p-5 border border-slate-100 flex flex-col h-full';
-                card.innerHTML = `
-                    <div class="flex items-start justify-between mb-2">
-                        <div class="p-2 bg-slate-50 rounded-lg text-2xl">${f.icon}</div>
-                        <span class="text-xs uppercase font-bold text-slate-400 tracking-wider">${f.type === 'shortcut' ? 'Shortcut' : 'Core'}</span>
-                    </div>
-                    <h4 class="font-bold text-slate-800 text-lg">${f.title}</h4>
-                    <p class="text-sm text-slate-500 mt-1 flex-grow">${f.desc}</p>
-                    ${keysHtml}
-                `;
-                grid.appendChild(card);
+        // 3. Features Table Filter
+        function filterTable(category) {
+            // Update UI buttons (Dark Mode adapted)
+            const btns = document.querySelectorAll('#features button');
+            btns.forEach(b => {
+                b.className = "text-xs font-medium px-3 py-1.5 bg-gray-900 border border-gray-700 text-gray-400 rounded hover:text-white transition-colors focus:ring-2 focus:ring-blue-500";
             });
-        }
+            event.target.className = "text-xs font-medium px-3 py-1.5 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors focus:ring-2 focus:ring-blue-500";
 
-        function filterFeatures(type, btn) {
-            renderFeatures(type);
-            document.querySelectorAll('#features button').forEach(b => b.classList.remove('active-filter', 'ring-2', 'ring-purple-500'));
-            btn.classList.add('active-filter', 'ring-2', 'ring-purple-500');
-        }
-
-        // 4. Stepper Logic
-        let currentStep = 0;
-        const totalSteps = 4;
-
-        function setStep(step) {
-            currentStep = step;
-            updateStepperUI();
-        }
-
-        function changeStep(dir) {
-            currentStep = Math.min(Math.max(currentStep + dir, 0), totalSteps - 1);
-            updateStepperUI();
-        }
-
-        function updateStepperUI() {
-            // Update Headers
-            for (let i = 0; i < totalSteps; i++) {
-                const btn = document.getElementById(`step-btn-${i}`);
-                if (i === currentStep) {
-                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-purple-500 text-purple-700 font-bold transition-colors';
-                } else if (i < currentStep) {
-                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-green-400 text-green-600 transition-colors';
+            // Filter rows
+            const rows = document.querySelectorAll('#shortcuts-table tbody tr');
+            rows.forEach(row => {
+                if (category === 'all' || row.dataset.cat === category) {
+                    row.style.display = '';
                 } else {
-                    btn.className = 'step-btn whitespace-nowrap flex-1 py-4 text-center text-sm font-medium border-b-2 border-transparent text-slate-400 hover:bg-slate-50 transition-colors';
-                }
-            }
-
-            // Show Content
-            document.querySelectorAll('.step-content').forEach((el, index) => {
-                if (index === currentStep) {
-                    el.classList.remove('hidden');
-                    el.classList.add('animate-fade-in');
-                } else {
-                    el.classList.add('hidden');
+                    row.style.display = 'none';
                 }
             });
-
-            // Update Buttons
-            document.getElementById('prev-btn').disabled = currentStep === 0;
-            document.getElementById('next-btn').innerText = currentStep === totalSteps - 1 ? 'Finish' : 'Next Step';
-            document.getElementById('next-btn').disabled = currentStep === totalSteps - 1;
         }
 
-        // 5. File Tree Logic
-        function renderFileTree(nodes, parentEl) {
+        // 4. File Tree for Docs
+        function renderDocTree(nodes, parentEl, depth) {
             nodes.forEach(node => {
                 const li = document.createElement('li');
-                const isFolder = node.type === 'folder';
-                
-                const icon = isFolder ? '📁' : '📄';
-                const colorClass = isFolder ? 'text-yellow-500' : 'text-slate-500';
+                const isFolder = node.type === 'folder' || node.children;
+                // Using unicode icons for folders to keep it simple and light
+                const icon = isFolder ? '📁' : '📄'; 
+                const padding = depth * 14 + 8; // dynamic padding for hierarchy
                 
                 li.innerHTML = `
-                    <div class="flex items-center gap-2 py-1 px-2 hover:bg-slate-50 rounded cursor-pointer group" onclick="showFileDetail('${node.name}', '${node.desc || ''}', '${node.type === 'folder' ? 'Folder' : 'File'}')">
-                        <span class="${colorClass}">${icon}</span>
-                        <span class="group-hover:text-purple-600 transition-colors">${node.name}</span>
+                    <div style="padding-left: ${padding}px" class="py-1.5 pr-3 hover:bg-gray-800 hover:text-blue-400 cursor-pointer rounded-md text-gray-400 transition-colors flex items-center gap-2 border border-transparent hover:border-gray-700" 
+                         onclick="showDocFile('${node.name}', '${node.desc || ''}', ${isFolder})">
+                        <span class="text-base ${isFolder ? 'opacity-80' : 'opacity-60'}">${icon}</span>
+                        <span>${node.name}</span>
                     </div>
                 `;
 
-                if (node.children) {
-                    const ul = document.createElement('ul');
-                    ul.className = "pl-6 border-l border-slate-200 ml-2 mt-1";
-                    renderFileTree(node.children, ul);
-                    li.appendChild(ul);
-                }
                 parentEl.appendChild(li);
+
+                if (node.children) {
+                    renderDocTree(node.children, parentEl, depth + 1);
+                }
             });
         }
 
-        function showFileDetail(name, desc, type) {
-            const container = document.getElementById('file-detail-content');
-            const icon = type === 'Folder' ? '📁' : '📄';
+        function showDocFile(name, desc, isFolder) {
+            const container = document.getElementById('file-doc-content');
+            const typeBadge = isFolder ? 'Directory' : 'Code File';
+            const icon = isFolder ? '📁' : '📄';
             
             container.innerHTML = `
-                <div class="mb-4">
-                    <span class="text-4xl block mb-2">${icon}</span>
-                    <h3 class="text-2xl font-bold text-white break-all">${name}</h3>
-                    <span class="inline-block px-2 py-1 mt-2 rounded bg-slate-700 text-xs text-slate-300 uppercase font-bold">${type}</span>
-                </div>
-                <div class="bg-slate-800 p-4 rounded-lg border border-slate-700">
-                    <h4 class="text-slate-400 text-xs uppercase font-bold mb-2">Description / Purpose</h4>
-                    <p class="text-slate-200 leading-relaxed">${desc || 'No specific description available.'}</p>
+                <div class="w-full animate-fade-in">
+                    <div class="flex items-start justify-between mb-4">
+                        <div>
+                            <div class="text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1.5">${typeBadge}</div>
+                            <h4 class="text-lg font-mono font-bold text-white bg-gray-900 inline-block px-3 py-1.5 rounded-md border border-gray-700">${icon} ${name}</h4>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-300 leading-relaxed bg-gray-900/50 p-4 rounded-lg border border-gray-700/50 shadow-inner">
+                        ${desc || 'Detailed documentation for this element has not been written yet.'}
+                    </p>
                 </div>
             `;
+        }
+
+        // 5. ScrollSpy & Mobile Menu
+        function setupScrollSpy() {
+            const sections = document.querySelectorAll('section');
+            const leftNavLinks = document.querySelectorAll('.left-nav-link');
+            const rightNavLinks = document.querySelectorAll('.right-nav-link');
+            const mainContent = document.getElementById('main-content');
+
+            mainContent.addEventListener('scroll', () => {
+                let current = '';
+                sections.forEach(section => {
+                    const sectionTop = section.offsetTop;
+                    const sectionHeight = section.clientHeight;
+                    // Adjusted offset for sticky header / padding
+                    if (mainContent.scrollTop >= (sectionTop - 120)) {
+                        current = section.getAttribute('id');
+                    }
+                });
+
+                // Update Left Nav
+                leftNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+                
+                // Update Right Nav
+                rightNavLinks.forEach(link => {
+                    link.classList.remove('active');
+                    if (link.getAttribute('href').includes(current)) {
+                        link.classList.add('active');
+                    }
+                });
+            });
+
+            // Mobile Menu Toggle
+            const btn = document.getElementById('mobile-menu-btn');
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('sidebar-overlay');
+
+            function toggleMenu() {
+                sidebar.classList.toggle('-translate-x-full');
+                overlay.classList.toggle('hidden');
+            }
+
+            btn.addEventListener('click', toggleMenu);
+            overlay.addEventListener('click', toggleMenu);
+            leftNavLinks.forEach(link => {
+                link.addEventListener('click', () => {
+                    if (window.innerWidth < 1024) toggleMenu();
+                });
+            });
         }
     </script>
 </body>
