@@ -134,6 +134,29 @@ async function save_file() {
     }
 }
 
+async function new_file() {
+    if (!apiReady) return;
+        if (isDirty) {
+        const confirmNew = confirm("Você tem alterações não salvas. Deseja descartá-las e criar um novo arquivo?");
+        if (!confirmNew) return; 
+    }
+
+    try {
+        const response = await pywebview.api.new_file();
+        if (response.success) {
+            editor.setValue(""); 
+            editor.clearHistory(); 
+            
+            isDirty = false;
+            currentFilename = response.filename; 
+            updateTitle();
+            showToast(response.message, "success");
+        }
+    } catch (err) {
+        showToast("Erro de comunicação com o sistema.", "error");
+    }
+}
+
 async function open_file() {
     if (!apiReady) return;
     try {
@@ -233,6 +256,7 @@ function togglePreview() {
 
 
 window.addEventListener('keydown', e => {
+    if (e.ctrlKey && (e.key === 'n' || e.key === 'N')) { e.preventDefault(); new_file(); }
     if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); save_file(); }
     if (e.ctrlKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); open_file(); }
     if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); print_pdf(); }
