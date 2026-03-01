@@ -2,7 +2,7 @@ let previewState = 0; // 0 = editor, 1 = split, 2 = preview
 let previewVisivel = false;
 let isDirty = false;
 let apiReady = false;
-
+let currentFilename = "mnemo";
 
 let isSyncingEditor = false;
 let isSyncingPreview = false;
@@ -35,10 +35,10 @@ function showToast(message, type = "success") {
 function updateTitle() {
     const titleEl = document.querySelector('header span');
     if (isDirty) {
-        titleEl.innerHTML = "mnemo ↓ *";
+        titleEl.innerHTML = `${currentFilename} ↓ *`;
         titleEl.classList.replace("text-gray-500", "text-blue-500");
     } else {
-        titleEl.innerHTML = "mnemo ↓";
+        titleEl.innerHTML = `${currentFilename} ↓`;
         titleEl.classList.replace("text-blue-500", "text-gray-500");
     }
 }
@@ -105,7 +105,7 @@ editor.on("change", () => {
             
             if (window.Prism) Prism.highlightAllUnder(preview);
         } catch (error) {
-            console.error("Erro ao renderizar Markdown:", error);
+            console.error("Error rendering Markdown:", error); // Traduzido
         }
     }, 300); 
 });
@@ -124,20 +124,21 @@ async function save_file() {
         const response = await pywebview.api.save_file(editor.getValue());
         if (response.success) {
             isDirty = false;
+            if (response.filename) currentFilename = response.filename;
             updateTitle();
             showToast(response.message, "success");
         } else if (!response.error.includes("cancelada")) {
             showToast(response.error, "error");
         }
     } catch (err) {
-        showToast("Erro de comunicação com o sistema.", "error");
+        showToast("System communication error.", "error"); // Traduzido
     }
 }
 
 async function new_file() {
     if (!apiReady) return;
         if (isDirty) {
-        const confirmNew = confirm("Você tem alterações não salvas. Deseja descartá-las e criar um novo arquivo?");
+        const confirmNew = confirm("You have unsaved changes. Do you want to discard them and create a new file?"); // Traduzido
         if (!confirmNew) return; 
     }
 
@@ -153,7 +154,7 @@ async function new_file() {
             showToast(response.message, "success");
         }
     } catch (err) {
-        showToast("Erro de comunicação com o sistema.", "error");
+        showToast("System communication error.", "error"); // Traduzido
     }
 }
 
@@ -165,12 +166,13 @@ async function open_file() {
             editor.setValue(response.content);
             editor.refresh();
             isDirty = false;
+            if (response.filename) currentFilename = response.filename;
             updateTitle();
         } else if (!response.error.includes("cancelada")) {
             showToast(response.error, "error");
         }
     } catch (err) {
-        showToast("Erro de comunicação com o sistema.", "error");
+        showToast("System communication error.", "error"); // Traduzido
     }
 }
 
@@ -186,7 +188,7 @@ function print_pdf() {
             showToast(response.error, "error");
         }
     }).catch(() => {
-        showToast("Erro ao gerar PDF.", "error");
+        showToast("Error generating PDF.", "error"); // Traduzido
     });
 }
 
