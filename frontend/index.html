@@ -44,6 +44,16 @@
             transition: width 0.3s ease;
         }
 
+        #preview code {
+            color: #0f172a; 
+        }
+
+        #preview pre, 
+        #preview pre code {
+            color: #f8f8f2 !important; 
+            text-shadow: none;
+        }
+
         .CodeMirror { 
             height: 100%; 
             font-family: 'Fira Code', monospace; 
@@ -147,13 +157,12 @@
 
     <main>
         <div id="editor-container"></div>
-        <div id="preview" class="markdown-body hidden"></div>
+        <div id="preview" class="markdown-body hidden text-slate-900"></div>
     </main>
 
     <script src="libs/codemirror.min.js"></script>
     <script src="libs/markdown.min.js"></script> 
     <script src="libs/prism.min.js"></script>
-    <script src="script.js"></script>
     <script src="script.js"></script>
     
 </body>
