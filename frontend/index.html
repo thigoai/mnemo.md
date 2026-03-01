@@ -10,100 +10,11 @@
     <link rel="stylesheet" href="libs/dracula.min.css">
     <link rel="stylesheet" href="libs/github-markdown.min.css">
     <link rel="stylesheet" href="libs/prism-tomorrow.min.css">
-
     <link rel="stylesheet" href="libs/katex/katex.min.css">
     <script defer src="libs/katex/katex.min.js"></script>
     <script defer src="libs/katex/contrib/auto-render.min.js"></script>
 
-    <style>
-        :root {
-            --bg-dark: #020617;
-            --border: #1e293b;
-        }
-
-        main {
-            flex: 1;
-            display: flex;
-            flex-direction: row !important; 
-            overflow: hidden;
-            background-color: #282a36; 
-        }
-
-        #editor-container {
-            width: 50%;
-            height: 100%;
-            border-right: 1px solid var(--border);
-            transition: width 0.3s ease;
-        }
-
-        #preview {
-            width: 50%;
-            height: 100%;
-            overflow-y: auto;
-            background-color: white !important;
-            transition: width 0.3s ease;
-        }
-
-        .CodeMirror { 
-            height: 100%; 
-            font-family: 'Fira Code', monospace; 
-            font-size: 15px;
-        }
-        
-        .btn-action {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 0.5rem 0.85rem;
-            border-radius: 0.5rem;
-            font-size: 0.75rem;
-            font-weight: 600;
-            transition: all 0.2s;
-            border: 1px solid transparent;
-        }
-        
-        .cm-s-dracula .cm-header { color: #50fa7b !important; font-weight: bold; }
-        .cm-s-dracula .cm-variable-2 { color: #ff79c6 !important; }
-
-        ::-webkit-scrollbar { width: 6px; height: 6px; }
-        ::-webkit-scrollbar-track { background: #0f172a; }
-        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 10px; }
-
-        .markdown-body { padding: 30px; line-height: 1.6; }
-
-        @media (max-width: 600px) {
-            .markdown-body { padding: 15px; }
-            .CodeMirror { font-size: 13px; }
-            h1 { display: none; }
-        }
-
-        .hidden { display: none !important; }
-        
-        .icon-svg {
-            width: 1.1rem;
-            height: 1.1rem;
-            stroke-width: 2.5;
-        }
-
-        @media (max-width: 768px) {
-            .hide-mobile {
-                display: none;
-            }
-            
-            .btn-action {
-                padding: 0.5rem; 
-            }
-            
-            header {
-                padding: 0 10px;
-            }
-        }
-
-        .flex-nowrap {
-            display: flex;
-            flex-wrap: nowrap;
-        }
-    </style>
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body class="bg-slate-950 h-screen flex flex-col overflow-hidden text-slate-200">
@@ -147,13 +58,12 @@
 
     <main>
         <div id="editor-container"></div>
-        <div id="preview" class="markdown-body hidden"></div>
+        <div id="preview" class="markdown-body hidden text-slate-900"></div>
     </main>
 
     <script src="libs/codemirror.min.js"></script>
     <script src="libs/markdown.min.js"></script> 
     <script src="libs/prism.min.js"></script>
-    <script src="script.js"></script>
     <script src="script.js"></script>
     
 </body>
