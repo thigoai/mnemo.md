@@ -34,13 +34,24 @@ function showToast(message, type = "success") {
 
 function updateTitle() {
     const titleEl = document.querySelector('header span');
-    if (isDirty) {
-        titleEl.innerHTML = `${currentFilename} ↓ *`;
-        titleEl.classList.replace("text-gray-500", "text-blue-500");
-    } else {
-        titleEl.innerHTML = `${currentFilename} ↓`;
-        titleEl.classList.replace("text-blue-500", "text-gray-500");
+    
+    // A logo base intacta
+    const baseName = "mnemo ↓";
+    let fileMarkup = "";
+
+    // Se houver um arquivo aberto, cria um span separado com classes menores e cor neutra
+    if (currentFilename && currentFilename !== "mnemo") {
+        // text-sm (menor), font-medium (sem negrito exagerado), text-slate-400 (cinza discreto), ml-3 (margem)
+        fileMarkup = `<span class="text-sm md:text-base font-medium text-slate-400 ml-3 align-middle">— &nbsp;${currentFilename}</span>`;
     }
+
+    // O asterisco de não salvo
+    let dirtyMarkup = isDirty ? `<span class="text-gray-500"> * </span>` : "";
+
+    // Junta tudo no HTML
+    titleEl.innerHTML = `${baseName}${fileMarkup}${dirtyMarkup}`;
+
+
 }
 
 
