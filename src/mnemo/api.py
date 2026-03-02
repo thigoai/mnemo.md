@@ -49,6 +49,15 @@ class Api:
             return response
 
         return {"success": False, "error": "Operation canceled by the user"}
+    
+    def new_file(self):
+        self._current_filepath = None
+        
+        return {
+            "success": True, 
+            "filename": "mnemo",
+            "message": "New file created."
+        }
 
     def save_file(self, content):
         if self._current_filepath:

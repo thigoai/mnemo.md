@@ -2,7 +2,7 @@ let previewState = 0; // 0 = editor, 1 = split, 2 = preview
 let previewVisivel = false;
 let isDirty = false;
 let apiReady = false;
-
+let currentFilename = "mnemo";
 
 let isSyncingEditor = false;
 let isSyncingPreview = false;
@@ -34,13 +34,19 @@ function showToast(message, type = "success") {
 
 function updateTitle() {
     const titleEl = document.querySelector('header span');
-    if (isDirty) {
-        titleEl.innerHTML = "mnemo ↓ *";
-        titleEl.classList.replace("text-gray-500", "text-blue-500");
-    } else {
-        titleEl.innerHTML = "mnemo ↓";
-        titleEl.classList.replace("text-blue-500", "text-gray-500");
+    
+    const baseName = "mnemo ↓";
+    let fileMarkup = "";
+
+    if (currentFilename && currentFilename !== "mnemo") {
+
+        fileMarkup = `<span class="text-sm md:text-base font-medium text-slate-400 ml-3 align-middle">— &nbsp;${currentFilename}</span>`;
     }
+
+    let dirtyMarkup = isDirty ? `<span class="text-gray-500"> * </span>` : "";
+
+
+    titleEl.innerHTML = `${baseName}${fileMarkup}${dirtyMarkup}`;
 }
 
 
@@ -105,7 +111,7 @@ editor.on("change", () => {
             
             if (window.Prism) Prism.highlightAllUnder(preview);
         } catch (error) {
-            console.error("Erro ao renderizar Markdown:", error);
+            console.error("Error rendering Markdown:", error); // Traduzido
         }
     }, 300); 
 });
@@ -124,13 +130,37 @@ async function save_file() {
         const response = await pywebview.api.save_file(editor.getValue());
         if (response.success) {
             isDirty = false;
+            if (response.filename) currentFilename = response.filename;
             updateTitle();
             showToast(response.message, "success");
         } else if (!response.error.includes("cancelada")) {
             showToast(response.error, "error");
         }
     } catch (err) {
-        showToast("Erro de comunicação com o sistema.", "error");
+        showToast("System communication error.", "error"); // Traduzido
+    }
+}
+
+async function new_file() {
+    if (!apiReady) return;
+        if (isDirty) {
+        const confirmNew = confirm("You have unsaved changes. Do you want to discard them and create a new file?"); // Traduzido
+        if (!confirmNew) return; 
+    }
+
+    try {
+        const response = await pywebview.api.new_file();
+        if (response.success) {
+            editor.setValue(""); 
+            editor.clearHistory(); 
+            
+            isDirty = false;
+            currentFilename = response.filename; 
+            updateTitle();
+            showToast(response.message, "success");
+        }
+    } catch (err) {
+        showToast("System communication error.", "error"); // Traduzido
     }
 }
 
@@ -142,12 +172,13 @@ async function open_file() {
             editor.setValue(response.content);
             editor.refresh();
             isDirty = false;
+            if (response.filename) currentFilename = response.filename;
             updateTitle();
         } else if (!response.error.includes("cancelada")) {
             showToast(response.error, "error");
         }
     } catch (err) {
-        showToast("Erro de comunicação com o sistema.", "error");
+        showToast("System communication error.", "error"); // Traduzido
     }
 }
 
@@ -163,7 +194,7 @@ function print_pdf() {
             showToast(response.error, "error");
         }
     }).catch(() => {
-        showToast("Erro ao gerar PDF.", "error");
+        showToast("Error generating PDF.", "error"); // Traduzido
     });
 }
 
@@ -233,6 +264,7 @@ function togglePreview() {
 
 
 window.addEventListener('keydown', e => {
+    if (e.ctrlKey && (e.key === 'n' || e.key === 'N')) { e.preventDefault(); new_file(); }
     if (e.ctrlKey && (e.key === 's' || e.key === 'S')) { e.preventDefault(); save_file(); }
     if (e.ctrlKey && (e.key === 'o' || e.key === 'O')) { e.preventDefault(); open_file(); }
     if (e.ctrlKey && (e.key === 'p' || e.key === 'P')) { e.preventDefault(); print_pdf(); }
